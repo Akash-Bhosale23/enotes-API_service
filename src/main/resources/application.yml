@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: ENotes_API_Service
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/e_notes
+    username: root
+    password: 1999redmi3s
+
+  jpa:
+    hibernate:
+      ddl-auto: none
