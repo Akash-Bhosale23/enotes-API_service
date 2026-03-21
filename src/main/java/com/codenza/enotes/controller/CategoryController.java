@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.codenza.enotes.dto.CategoryDTO;
 import com.codenza.enotes.dto.CategoryResponseDTO;
 import com.codenza.enotes.entity.Category;
+import com.codenza.enotes.exceptions.ResourceNotFoundException;
 import com.codenza.enotes.service.CategoryService;
 
 @RestController
@@ -67,16 +68,15 @@ public class CategoryController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> getCategoryById(@PathVariable Integer id){
-		
-		CategoryDTO categoryDto= categoryService.getCategoryById(id);
-		
-		if(ObjectUtils.isEmpty(categoryDto)) {
-			return new ResponseEntity<>("Category not found with id :"+id, HttpStatus.NOT_FOUND);
-		}
-		return new ResponseEntity<>(categoryDto, HttpStatus.OK);
-		
-		
+	public ResponseEntity<?> getCategoryById(@PathVariable Integer id) throws Exception{
+			CategoryDTO categoryDto= categoryService.getCategoryById(id);
+			
+			if(ObjectUtils.isEmpty(categoryDto)) {
+				return new ResponseEntity<>("Category not found with id :"+id, HttpStatus.NOT_FOUND);
+			}
+			return new ResponseEntity<>(categoryDto, HttpStatus.OK);
+
+	
 	}
 	
 	@DeleteMapping("/{id}")

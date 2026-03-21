@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.codenza.enotes.dto.CategoryDTO;
 import com.codenza.enotes.dto.CategoryResponseDTO;
-import com.codenza.enotes.entity.Category;
+
 
 public interface CategoryService {
 
@@ -14,7 +14,7 @@ public interface CategoryService {
 
 	public List<CategoryResponseDTO> getActiveCategory();
 
-	public CategoryDTO getCategoryById(Integer id);
+	public CategoryDTO getCategoryById(Integer id) throws Exception;
 
 	public Boolean deleteCategoryById(Integer id);
 }

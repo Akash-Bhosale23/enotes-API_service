@@ -12,6 +12,7 @@ import org.springframework.util.ObjectUtils;
 import com.codenza.enotes.dto.CategoryDTO;
 import com.codenza.enotes.dto.CategoryResponseDTO;
 import com.codenza.enotes.entity.Category;
+import com.codenza.enotes.exceptions.ResourceNotFoundException;
 import com.codenza.enotes.repository.CategoryRepository;
 import com.codenza.enotes.service.CategoryService;
 
@@ -87,11 +88,14 @@ public class CatetoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public CategoryDTO getCategoryById(Integer id) {
-		Optional<Category> findCategoryById = categoryRepo.findByIdAndIsDeletedFalse(id);
+	public CategoryDTO getCategoryById(Integer id) throws Exception {
+		Category category = categoryRepo.findByIdAndIsDeletedFalse(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Category not found with id : "+id));
 
-		if (findCategoryById.isPresent()) {
-			Category category = findCategoryById.get();
+		if (!ObjectUtils.isEmpty(category)) {
+			if(category.getName()==null) {
+				throw new IllegalArgumentException("Name is null..");
+			}
 			return modelMapper.map(category, CategoryDTO.class);
 		}
 		return null;
