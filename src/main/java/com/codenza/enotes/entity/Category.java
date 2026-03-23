@@ -3,7 +3,10 @@ package com.codenza.enotes.entity;
 
 import jakarta.persistence.Id;
 
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import lombok.AllArgsConstructor;
@@ -16,6 +19,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Category extends BaseModel {
 
 	@Id
@@ -23,6 +27,8 @@ public class Category extends BaseModel {
 	private Integer id;
 	private String name;
 	private String description;
+	private Boolean isActive;
+	private Boolean isDeleted;
 	
 	
 	
