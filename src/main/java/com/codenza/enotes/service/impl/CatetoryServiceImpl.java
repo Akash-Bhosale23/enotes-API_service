@@ -12,6 +12,7 @@ import org.springframework.util.ObjectUtils;
 import com.codenza.enotes.dto.CategoryDTO;
 import com.codenza.enotes.dto.CategoryResponseDTO;
 import com.codenza.enotes.entity.Category;
+import com.codenza.enotes.exceptions.ExistDataException;
 import com.codenza.enotes.exceptions.ResourceNotFoundException;
 import com.codenza.enotes.repository.CategoryRepository;
 import com.codenza.enotes.service.CategoryService;
@@ -35,6 +36,14 @@ public class CatetoryServiceImpl implements CategoryService {
 		//validation
 		
 		validation.categoryValidation(categoryDTO);
+		
+		//Check category is already exist or not
+		
+		Boolean exist= categoryRepo.existsByName(categoryDTO.getName().trim());
+		
+		if(exist) {
+			throw new ExistDataException("Category is already exist");
+		}
 		
 		Category category= modelMapper.map(categoryDTO, Category.class);
 		
