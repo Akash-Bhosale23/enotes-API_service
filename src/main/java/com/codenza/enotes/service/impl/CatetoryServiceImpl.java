@@ -15,6 +15,7 @@ import com.codenza.enotes.entity.Category;
 import com.codenza.enotes.exceptions.ResourceNotFoundException;
 import com.codenza.enotes.repository.CategoryRepository;
 import com.codenza.enotes.service.CategoryService;
+import com.codenza.enotes.util.CategoryValidation;
 
 @Service
 public class CatetoryServiceImpl implements CategoryService {
@@ -25,13 +26,15 @@ public class CatetoryServiceImpl implements CategoryService {
 	@Autowired
 	private ModelMapper modelMapper;
 	
+	@Autowired
+	private CategoryValidation validation;
+	
 	@Override
 	public Boolean saveCategory(CategoryDTO categoryDTO) {
+
+		//validation
 		
-//		Category category =new Category();
-//		category.setName(categoryDTO.getName());
-//		category.setDescription(categoryDTO.getDescription());
-//		category.setIsActive(categoryDTO.getIsActive());
+		validation.categoryValidation(categoryDTO);
 		
 		Category category= modelMapper.map(categoryDTO, Category.class);
 		

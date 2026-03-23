@@ -28,4 +28,10 @@ public class GlobalExceptionHandler {
 		log.error("GlobalExceptionHandler  :: ResourceNotFoundException ::", e.getMessage());
 		return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
 	}
+	
+	@ExceptionHandler(CategoryValidationException.class)
+	public ResponseEntity<?> handleCategoryValidationException(CategoryValidationException e) {
+		
+		return new ResponseEntity<>(e.getErrors(),HttpStatus.BAD_REQUEST);
+	}
 }
