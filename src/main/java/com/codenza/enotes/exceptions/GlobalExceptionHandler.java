@@ -1,5 +1,7 @@
 package com.codenza.enotes.exceptions;
 
+import java.io.FileNotFoundException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -41,6 +43,13 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<?> handleCategoryValidationException(CategoryValidationException e) {
 //		return new ResponseEntity<>(e.getErrors(), HttpStatus.BAD_REQUEST);
 		return CommonUtil.createErrorResponse(e.getErrors(), HttpStatus.BAD_REQUEST);
+
+	}
+	
+	@ExceptionHandler(FileNotFoundException.class)
+	public ResponseEntity<?> handleFileNotFoundException(FileNotFoundException e) {
+//		return new ResponseEntity<>(e.getErrors(), HttpStatus.NOT_FOUND);
+		return CommonUtil.createErrorResponse(e.getMessage(), HttpStatus.NOT_FOUND);
 
 	}
 	

@@ -3,7 +3,9 @@ package com.codenza.enotes.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
@@ -17,7 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.codenza.enotes.dto.NoteDTO;
+import com.codenza.enotes.entity.FileDetails;
 import com.codenza.enotes.entity.Note;
+import com.codenza.enotes.exceptions.ResourceNotFoundException;
 import com.codenza.enotes.service.NoteService;
 import com.codenza.enotes.util.CommonUtil;
 
@@ -38,6 +42,25 @@ public class NoteController {
 		}else {
 			return CommonUtil.createErrorResponseMessage("Not saved", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+	
+	@GetMapping("/download/{id}")
+	public ResponseEntity<?> downloadFile(@PathVariable Integer id) throws Exception{
+		
+		FileDetails fileDetails= noteService.getFileDetails(id);
+		
+		byte[] fileData= noteService.downloadFile(fileDetails);
+		
+		HttpHeaders headers=new HttpHeaders();
+		
+		String contentType = CommonUtil.getContentType(fileDetails.getOriginalFileName());
+		
+		headers.setContentType(MediaType.parseMediaType(contentType));
+		headers.setContentDispositionFormData("Attachement", fileDetails.getOriginalFileName());
+		
+		return ResponseEntity.ok().headers(headers).body(fileData);
+		
+		
 	}
 	
 	@GetMapping("/")
