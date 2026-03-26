@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.codenza.enotes.dto.NoteDTO;
 import com.codenza.enotes.entity.Note;
@@ -27,9 +29,9 @@ public class NoteController {
 	private NoteService noteService;
 	
 	@PostMapping("/create")
-	public ResponseEntity<?> saveNote(@RequestBody NoteDTO noteDto) throws Exception{
+	public ResponseEntity<?> saveNote(@RequestParam String notes, @RequestParam(required=false) MultipartFile file) throws Exception{
 		
-		Boolean savedNote = noteService.saveNote(noteDto);
+		Boolean savedNote = noteService.saveNote(notes, file);
 		
 		if(savedNote) {
 			return CommonUtil.createBuildResponseMessage("Saved success", HttpStatus.CREATED);
