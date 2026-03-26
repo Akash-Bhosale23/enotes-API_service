@@ -1,7 +1,9 @@
 package com.codenza.enotes.service.impl;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -14,6 +16,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -86,11 +89,11 @@ public class NoteServiceImpl implements NoteService {
 			String originalFilename = file.getOriginalFilename();
 			String extension = FilenameUtils.getExtension(originalFilename);
 			
-			List<String> extensionAllow = Arrays.asList("pdf", "xlsx", "jpg", "png");
+			List<String> extensionAllow = Arrays.asList("pdf", "xlsx", "jpg", "png", "jpeg");
 			
 			if(!extensionAllow.contains(extension)) {
 			
-				throw new IllegalArgumentException("Invalid file format.. updload only pdf, xlxs, jpg, png");
+				throw new IllegalArgumentException("Invalid file format.. updload only pdf, xlxs, jpg, png ,jpeg");
 			}
 			
 			
@@ -150,6 +153,23 @@ public class NoteServiceImpl implements NoteService {
 		List<NoteDTO> allNotes = noteRepository.findAll().stream().map(note->mapper.map(note, NoteDTO.class)).toList();
 		
 		return allNotes;
+	}
+
+	@Override
+	public byte[] downloadFile(FileDetails fileDetails) throws Exception {
+//		FileDetails fileDtls = fileRepository.findById(fileDetails.getId()).orElseThrow(()->new ResourceNotFoundException("File is not available"));
+		
+		InputStream io= new FileInputStream(fileDetails.getPath());
+		
+		return StreamUtils.copyToByteArray(io);
+		
+		
+	}
+
+	@Override
+	public FileDetails getFileDetails(Integer id) throws Exception {
+		FileDetails fileDtls = fileRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("File is not available"));
+		return fileDtls;
 	}
 
 }
