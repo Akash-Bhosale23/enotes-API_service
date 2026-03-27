@@ -25,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.codenza.enotes.dto.NoteDTO;
 import com.codenza.enotes.dto.NoteDTO.CategoryDTO;
+import com.codenza.enotes.dto.NoteDTO.FileDTO;
 import com.codenza.enotes.dto.NoteResponse;
 import com.codenza.enotes.entity.Category;
 import com.codenza.enotes.entity.FileDetails;
@@ -65,7 +66,18 @@ public class NoteServiceImpl implements NoteService {
 		checkCategoryExists(noteDTO.getCategory());
 		
 		
-		Note mapNote = mapper.map(noteDTO, Note.class);
+		Note mapNote;
+
+		if (!ObjectUtils.isEmpty(noteDTO.getId())) {
+			mapNote = noteRepository.findById(noteDTO.getId())
+			        .orElseThrow(() -> new ResourceNotFoundException("Invalid note id"));
+
+		    mapNote.setTitle(noteDTO.getTitle());
+		    mapNote.setDescription(noteDTO.getDescription());
+	
+		} else {
+		    mapNote = mapper.map(noteDTO, Note.class);
+		}
 		
 		FileDetails fileDetails = saveFile(file);
 
@@ -73,7 +85,10 @@ public class NoteServiceImpl implements NoteService {
 			mapNote.setFile(fileDetails);
 		}
 		else {
-			mapNote.setFile(null);
+			if(ObjectUtils.isEmpty(noteDTO.getId())) {
+				mapNote.setFile(null);
+			}
+			
 		}
 		
 		Note savedNote = noteRepository.save(mapNote);
