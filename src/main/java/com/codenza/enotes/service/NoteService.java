@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.codenza.enotes.dto.NoteDTO;
+import com.codenza.enotes.dto.NoteResponse;
 import com.codenza.enotes.entity.FileDetails;
 import com.codenza.enotes.exceptions.ResourceNotFoundException;
 
@@ -17,5 +18,7 @@ public interface NoteService {
 	public byte[] downloadFile(FileDetails fileDetails) throws Exception;
 
 	public FileDetails getFileDetails(Integer id) throws Exception;
+
+	public NoteResponse getAllNotesByUser(Integer userId, Integer pageNo, Integer pageSize);
 	
 }
