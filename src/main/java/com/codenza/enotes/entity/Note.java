@@ -1,6 +1,8 @@
 package com.codenza.enotes.entity;
 
 
+import java.util.Date;
+
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.Entity;
@@ -35,6 +37,10 @@ public class Note extends BaseModel {
 
 	@ManyToOne
 	private FileDetails file;
+	
+	private Boolean isDeleted;
+	
+	private Date deletedOn;
 	
 	
 }

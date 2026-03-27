@@ -10,9 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -86,6 +88,35 @@ public class NoteController {
 		if(ObjectUtils.isEmpty(notes)) {
 		return	ResponseEntity.noContent().build();			
 		}
+		return CommonUtil.createBuildResponse(notes, HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> deleteNoteById(@PathVariable Integer id) throws Exception{
+		
+		noteService.softDelete(id);
+		
+		return CommonUtil.createBuildResponseMessage("Deleted", HttpStatus.OK);
+	}
+
+	@PutMapping("/restore/{id}")
+	public ResponseEntity<?> restoreNoteById(@PathVariable Integer id) throws Exception{
+		
+		noteService.restoreNote(id);
+		
+		return CommonUtil.createBuildResponseMessage("Restored", HttpStatus.OK);
+	}
+	
+	@GetMapping("/restored")
+	public ResponseEntity<?> getRestoredNotesByUser() throws Exception{
+		
+		Integer userId=1;
+		List<NoteDTO> notes= noteService.getRestoredNotesByUser(userId);
+		
+		if(CollectionUtils.isEmpty(notes)) {
+			return CommonUtil.createBuildResponseMessage("Notes not available in Recycle bin", HttpStatus.OK);
+		}
+		
 		return CommonUtil.createBuildResponse(notes, HttpStatus.OK);
 	}
 }

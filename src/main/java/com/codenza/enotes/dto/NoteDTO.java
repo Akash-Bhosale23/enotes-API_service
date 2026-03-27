@@ -31,6 +31,10 @@ public class NoteDTO {
 	
 	private Date updatedOn;
 	
+	private Boolean isDeleted;
+	
+	private Date deletedOn;
+	
 	private FileDTO fileDetails;
 	
 	@AllArgsConstructor

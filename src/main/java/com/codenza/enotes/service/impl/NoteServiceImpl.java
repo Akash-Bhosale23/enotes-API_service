@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -61,6 +62,8 @@ public class NoteServiceImpl implements NoteService {
 		ObjectMapper ob=new ObjectMapper();
 		NoteDTO noteDTO = ob.readValue(note, NoteDTO.class);
 	
+		noteDTO.setIsDeleted(false);
+		noteDTO.setDeletedOn(null);
 		
 		// Category validation method
 		checkCategoryExists(noteDTO.getCategory());
@@ -196,7 +199,7 @@ public class NoteServiceImpl implements NoteService {
 		
 		Pageable pagable = PageRequest.of(pageNo, pageSize);
 	
-		Page<Note> pageNotes= noteRepository.findByCreatedBy(userId, pagable); 
+		Page<Note> pageNotes= noteRepository.findByCreatedByAndIsDeletedFalse(userId, pagable); 
 		
 		List<NoteDTO> noteDto= pageNotes.get().map(n->mapper.map(n, NoteDTO.class)).toList();
 		
@@ -213,4 +216,35 @@ public class NoteServiceImpl implements NoteService {
 		return notes;
 	}
 
+	@Override
+	public void softDelete(Integer id) throws Exception {
+		Note note = noteRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Note id is invalid.."));
+		
+		note.setIsDeleted(true);
+		note.setDeletedOn(new Date());
+		noteRepository.save(note);
+		
+	}
+
+	@Override
+	public void restoreNote(Integer id) throws Exception {
+		Note note = noteRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Note id is invalid"));
+		
+		note.setIsDeleted(false);
+		note.setDeletedOn(null);
+		noteRepository.save(note);
+	}
+
+	@Override
+	public List<NoteDTO> getRestoredNotesByUser(Integer userId) {
+		
+		List<Note> recycleNotes = noteRepository.findByCreatedByAndIsDeletedTrue(userId);
+		
+		List<NoteDTO> noteDtoList = recycleNotes.stream().map(note->mapper.map(note, NoteDTO.class)).toList();
+		
+		return noteDtoList;
+	}
+
+	
+	
 }

@@ -20,5 +20,11 @@ public interface NoteService {
 	public FileDetails getFileDetails(Integer id) throws Exception;
 
 	public NoteResponse getAllNotesByUser(Integer userId, Integer pageNo, Integer pageSize);
+
+	public void softDelete(Integer id) throws Exception;
+
+	public void restoreNote(Integer id) throws Exception;
+
+	public List<NoteDTO> getRestoredNotesByUser(Integer userId);
 	
 }
