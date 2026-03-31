@@ -1,5 +1,6 @@
 package com.codenza.enotes.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -15,5 +16,7 @@ public interface NoteRepository extends JpaRepository<Note, Integer>{
 	List<Note> findByCreatedByAndIsDeletedTrue(Integer userId);
 	
 	Page<Note> findByCreatedByAndIsDeletedFalse(Integer userId, Pageable pagable);
+
+	List<Note> findAllByIsDeletedAndDeletedOnBefore(boolean b, LocalDateTime cutOffDays);
 
 }

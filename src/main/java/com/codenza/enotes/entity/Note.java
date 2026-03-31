@@ -1,6 +1,8 @@
 package com.codenza.enotes.entity;
 
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -40,7 +42,7 @@ public class Note extends BaseModel {
 	
 	private Boolean isDeleted;
 	
-	private Date deletedOn;
+	private LocalDateTime deletedOn;
 	
 	
 }

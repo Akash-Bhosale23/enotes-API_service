@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +18,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -221,7 +224,7 @@ public class NoteServiceImpl implements NoteService {
 		Note note = noteRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Note id is invalid.."));
 		
 		note.setIsDeleted(true);
-		note.setDeletedOn(new Date());
+		note.setDeletedOn(LocalDateTime.now());
 		noteRepository.save(note);
 		
 	}
@@ -236,13 +239,36 @@ public class NoteServiceImpl implements NoteService {
 	}
 
 	@Override
-	public List<NoteDTO> getRestoredNotesByUser(Integer userId) {
+	public List<NoteDTO> getNotesFromRecycleBin(Integer userId) {
 		
 		List<Note> recycleNotes = noteRepository.findByCreatedByAndIsDeletedTrue(userId);
 		
 		List<NoteDTO> noteDtoList = recycleNotes.stream().map(note->mapper.map(note, NoteDTO.class)).toList();
 		
 		return noteDtoList;
+	}
+
+	@Override
+	public void hardDelete(Integer id) throws Exception {
+		Note note = noteRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Note not found with id : "+id));
+		
+		if(note.getIsDeleted()) {
+			noteRepository.delete(note);
+		}else {
+			throw new IllegalArgumentException("Sorry.. You can't hard delete it directly..");
+		}
+		
+	}
+
+	@Override
+	public void deleteNotesFromRecycleBin(Integer userId) {
+	
+		List<Note> recycleNotes = noteRepository.findByCreatedByAndIsDeletedTrue(userId);
+		
+		if(!CollectionUtils.isEmpty(recycleNotes)) {
+			noteRepository.deleteAll(recycleNotes);
+		}
+		
 	}
 
 	

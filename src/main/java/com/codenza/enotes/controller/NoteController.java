@@ -7,7 +7,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,8 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.codenza.enotes.dto.NoteDTO;
 import com.codenza.enotes.dto.NoteResponse;
 import com.codenza.enotes.entity.FileDetails;
-import com.codenza.enotes.entity.Note;
-import com.codenza.enotes.exceptions.ResourceNotFoundException;
 import com.codenza.enotes.service.NoteService;
 import com.codenza.enotes.util.CommonUtil;
 
@@ -91,8 +87,8 @@ public class NoteController {
 		return CommonUtil.createBuildResponse(notes, HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteNoteById(@PathVariable Integer id) throws Exception{
+	@DeleteMapping("/soft-delete/{id}")
+	public ResponseEntity<?> softDeleteNoteById(@PathVariable Integer id) throws Exception{
 		
 		noteService.softDelete(id);
 		
@@ -110,13 +106,32 @@ public class NoteController {
 	@GetMapping("/restored")
 	public ResponseEntity<?> getRestoredNotesByUser() throws Exception{
 		
-		Integer userId=1;
-		List<NoteDTO> notes= noteService.getRestoredNotesByUser(userId);
+		Integer userId=1; //temporary hard coded
+		List<NoteDTO> notes= noteService.getNotesFromRecycleBin(userId);
 		
 		if(CollectionUtils.isEmpty(notes)) {
 			return CommonUtil.createBuildResponseMessage("Notes not available in Recycle bin", HttpStatus.OK);
 		}
 		
 		return CommonUtil.createBuildResponse(notes, HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/hard-delete/{id}")
+	public ResponseEntity<?> hardDeleteNoteById(@PathVariable Integer id) throws Exception{
+		
+		noteService.hardDelete(id);
+		
+		return CommonUtil.createBuildResponseMessage("Deleted", HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/delete-recycle-bin")
+	public ResponseEntity<?> deleteAllNotesFromRecycleBin() throws Exception{
+		
+		Integer userId=1; //temporary hard coded
+		List<NoteDTO> notes= noteService.getNotesFromRecycleBin(userId);
+		
+		noteService.deleteNotesFromRecycleBin(userId);
+		
+		return CommonUtil.createBuildResponseMessage("Deleted", HttpStatus.OK);
 	}
 }

@@ -1,5 +1,7 @@
 package com.codenza.enotes.dto;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import com.codenza.enotes.entity.Category;
@@ -33,7 +35,7 @@ public class NoteDTO {
 	
 	private Boolean isDeleted;
 	
-	private Date deletedOn;
+	private LocalDateTime deletedOn;
 	
 	private FileDTO fileDetails;
 	
