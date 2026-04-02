@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.codenza.enotes.dto.FavouriteNoteDTO;
 import com.codenza.enotes.dto.NoteDTO;
 import com.codenza.enotes.dto.NoteResponse;
+import com.codenza.enotes.entity.FavouriteNote;
 import com.codenza.enotes.entity.FileDetails;
 import com.codenza.enotes.exceptions.ResourceNotFoundException;
 
@@ -30,5 +32,13 @@ public interface NoteService {
 	public void hardDelete(Integer id) throws Exception;
 
 	public void deleteNotesFromRecycleBin(Integer userId);
+	
+	public void favouriteNotes(Integer noteId) throws Exception ;
+	
+	public void unFavouriteNotes(Integer noteId) throws Exception;
+	
+	public List<FavouriteNoteDTO> getFavouriteNotes() throws Exception;
+	
+	
 	
 }

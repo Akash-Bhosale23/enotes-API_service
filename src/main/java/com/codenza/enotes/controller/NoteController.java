@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.codenza.enotes.dto.FavouriteNoteDTO;
 import com.codenza.enotes.dto.NoteDTO;
 import com.codenza.enotes.dto.NoteResponse;
 import com.codenza.enotes.entity.FileDetails;
+import com.codenza.enotes.repository.FavouriteNoteRepository;
 import com.codenza.enotes.service.NoteService;
 import com.codenza.enotes.util.CommonUtil;
 
@@ -31,6 +33,9 @@ public class NoteController {
 
 	@Autowired
 	private NoteService noteService;
+	
+	@Autowired
+	private FavouriteNoteRepository favouriteNoteRepository;
 	
 	@PostMapping("/create")
 	public ResponseEntity<?> saveNote(@RequestParam String notes, @RequestParam(required=false) MultipartFile file) throws Exception{
@@ -133,5 +138,33 @@ public class NoteController {
 		noteService.deleteNotesFromRecycleBin(userId);
 		
 		return CommonUtil.createBuildResponseMessage("Deleted", HttpStatus.OK);
+	}
+	
+	@PostMapping("/fav/{noteId}")
+	public ResponseEntity<?> favouriteNote(@PathVariable Integer noteId) throws Exception{
+		
+        noteService.favouriteNotes(noteId);
+		
+		return CommonUtil.createBuildResponseMessage("Noted added in favourites", HttpStatus.CREATED);
+	}
+	
+	@DeleteMapping("/un-fav/{favNoteId}")
+	public ResponseEntity<?> unFavouriteNote(@PathVariable Integer favNoteId) throws Exception{
+		
+		noteService.unFavouriteNotes(favNoteId);
+						
+		return CommonUtil.createBuildResponseMessage("Removed note from favourites", HttpStatus.OK);
+	}
+	
+	@GetMapping("/fav-notes")
+	public ResponseEntity<?> getAllFavNotes() throws Exception{
+		
+		List<FavouriteNoteDTO> favouriteNotes = noteService.getFavouriteNotes();
+		
+		if(CollectionUtils.isEmpty(favouriteNotes)) {
+			return ResponseEntity.noContent().build();
+		}
+		
+		return CommonUtil.createBuildResponse(favouriteNotes, HttpStatus.OK);
 	}
 }

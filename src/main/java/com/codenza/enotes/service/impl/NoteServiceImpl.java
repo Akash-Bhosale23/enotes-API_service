@@ -27,15 +27,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import com.codenza.enotes.dto.FavouriteNoteDTO;
 import com.codenza.enotes.dto.NoteDTO;
 import com.codenza.enotes.dto.NoteDTO.CategoryDTO;
 import com.codenza.enotes.dto.NoteDTO.FileDTO;
 import com.codenza.enotes.dto.NoteResponse;
 import com.codenza.enotes.entity.Category;
+import com.codenza.enotes.entity.FavouriteNote;
 import com.codenza.enotes.entity.FileDetails;
 import com.codenza.enotes.entity.Note;
 import com.codenza.enotes.exceptions.ResourceNotFoundException;
 import com.codenza.enotes.repository.CategoryRepository;
+import com.codenza.enotes.repository.FavouriteNoteRepository;
 import com.codenza.enotes.repository.FileRepository;
 import com.codenza.enotes.repository.NoteRepository;
 import com.codenza.enotes.service.NoteService;
@@ -58,6 +61,9 @@ public class NoteServiceImpl implements NoteService {
 	
 	@Autowired
 	private FileRepository fileRepository;
+	
+	@Autowired
+	private FavouriteNoteRepository favouriteNoteRepository;
 
 	@Override
 	public Boolean saveNote(String note, MultipartFile file) throws Exception {
@@ -268,6 +274,44 @@ public class NoteServiceImpl implements NoteService {
 		if(!CollectionUtils.isEmpty(recycleNotes)) {
 			noteRepository.deleteAll(recycleNotes);
 		}
+		
+	}
+
+	@Override
+	public void favouriteNotes(Integer noteId) throws Exception {
+		
+		int userId=1;
+		
+		Note note = noteRepository.findById(noteId).orElseThrow(()-> new ResourceNotFoundException("Note not found with id : "+noteId));
+		
+		FavouriteNote favouriteNote = FavouriteNote.builder()
+		.note(note)
+		.userId(userId)
+		.build();
+		
+		favouriteNoteRepository.save(favouriteNote);
+		
+	
+	}
+
+	@Override
+	public void unFavouriteNotes(Integer favouriteNoteId) throws Exception{
+		
+		FavouriteNote favouriteNote = favouriteNoteRepository.findById(favouriteNoteId)
+				.orElseThrow(() -> new ResourceNotFoundException("Note not found with id : " + favouriteNoteId));
+				
+		favouriteNoteRepository.delete(favouriteNote);
+	
+	}
+
+	@Override
+	public List<FavouriteNoteDTO> getFavouriteNotes() throws Exception {
+		
+		int userId=1;
+		
+		List<FavouriteNote> favouriteNotes = favouriteNoteRepository.findByUserId(userId);
+		
+		return favouriteNotes.stream().map(favNote->mapper.map(favNote, FavouriteNoteDTO.class)).toList();
 		
 	}
 
