@@ -315,6 +315,25 @@ public class NoteServiceImpl implements NoteService {
 		
 	}
 
+	@Override
+	public Boolean copyNote(Integer noteId) throws Exception {
+		Note note = noteRepository.findById(noteId)
+				.orElseThrow(() -> new ResourceNotFoundException("Note not found with id : " + noteId));
+
+		Note copyNote = Note.builder().title(note.getTitle()).description(note.getDescription())
+				.category(note.getCategory()).isDeleted(note.getIsDeleted()).file(null).build();
+
+		Note saveCopyNote = noteRepository.save(copyNote);
+		
+		if(!ObjectUtils.isEmpty(saveCopyNote)) {
+			
+			return true;
+		}
+		
+		return false;
+		
+	}
+
 	
 	
 }
