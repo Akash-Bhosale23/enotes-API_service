@@ -7,10 +7,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
 import com.codenza.enotes.dto.CategoryDTO;
+import com.codenza.enotes.dto.TodoDTO;
+import com.codenza.enotes.dto.TodoDTO.StatusDTO;
+import com.codenza.enotes.enums.TodoStatus;
 import com.codenza.enotes.exceptions.CategoryValidationException;
+import com.codenza.enotes.exceptions.ResourceNotFoundException;
 
 @Component
-public class CategoryValidation {
+public class Validation {
 
 	public void categoryValidation(CategoryDTO categoryDTO) {
 		
@@ -38,8 +42,8 @@ public class CategoryValidation {
 			}
 			
 			//validation for isActive field in category
-			if(ObjectUtils.isEmpty(categoryDTO.getName())) {
-				error.put("name" , "name field is empty or null");
+			if(ObjectUtils.isEmpty(categoryDTO.getIsActive())) {
+				error.put("isActive" , "isActive field is empty or null");
 			}else {
 				if(categoryDTO.getIsActive()!=Boolean.TRUE.booleanValue() && categoryDTO.getIsActive()!=Boolean.FALSE.booleanValue()) {
 					error.put("isActive", "isActive field required only True or False value");
@@ -52,4 +56,21 @@ public class CategoryValidation {
 		}
 		
 	}
+	
+	public void todoValidation(TodoDTO todo) throws Exception {
+		StatusDTO status = todo.getStatus();
+		
+		Boolean statusFound=false;
+		
+		for(TodoStatus st :TodoStatus.values()) {
+			if(st.getId().equals(status.getId())){
+				statusFound=true;
+			}
+		}
+		
+		if(!statusFound) {
+			throw new ResourceNotFoundException("Invalid status ! please enter among 1,2 or 3");
+		}
+	}
+	
 }

@@ -34,9 +34,6 @@ public class NoteController {
 	@Autowired
 	private NoteService noteService;
 	
-	@Autowired
-	private FavouriteNoteRepository favouriteNoteRepository;
-	
 	@PostMapping("/create")
 	public ResponseEntity<?> saveNote(@RequestParam String notes, @RequestParam(required=false) MultipartFile file) throws Exception{
 		

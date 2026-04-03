@@ -16,7 +16,7 @@ import com.codenza.enotes.exceptions.ExistDataException;
 import com.codenza.enotes.exceptions.ResourceNotFoundException;
 import com.codenza.enotes.repository.CategoryRepository;
 import com.codenza.enotes.service.CategoryService;
-import com.codenza.enotes.util.CategoryValidation;
+import com.codenza.enotes.util.Validation;
 
 @Service
 public class CatetoryServiceImpl implements CategoryService {
@@ -28,7 +28,7 @@ public class CatetoryServiceImpl implements CategoryService {
 	private ModelMapper modelMapper;
 	
 	@Autowired
-	private CategoryValidation validation;
+	private Validation validation;
 	
 	@Override
 	public Boolean saveCategory(CategoryDTO categoryDTO) {
