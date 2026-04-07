@@ -11,6 +11,20 @@ spring:
     hibernate:
       ddl-auto: none
 
+  mail:
+    host: smtp.gmail.com
+    username: abhosale5010@gmail.com
+    password: koff tsrk ghcw vrwz
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true 
+
+
 file:
   upload:
     path: notes/
+

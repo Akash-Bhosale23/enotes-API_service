@@ -13,14 +13,14 @@ import com.codenza.enotes.service.UserService;
 import com.codenza.enotes.util.CommonUtil;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/auth")
 public class AuthController {
 	
 	@Autowired
 	private UserService userService;
 
 	@PostMapping("/register")
-	public ResponseEntity<?> register(@RequestBody UserDTO userDTO){
+	public ResponseEntity<?> register(@RequestBody UserDTO userDTO) throws Exception{
 		
 		Boolean register = userService.register(userDTO);
 		

@@ -4,6 +4,6 @@ import com.codenza.enotes.dto.UserDTO;
 
 public interface UserService {
 
-	public Boolean register(UserDTO userDTO);
+	public Boolean register(UserDTO userDTO) throws Exception;
 	
 }
