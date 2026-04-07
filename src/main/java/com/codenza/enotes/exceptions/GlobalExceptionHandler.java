@@ -18,15 +18,19 @@ public class GlobalExceptionHandler {
 	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<?> handleException(Exception e) {
-		log.error("GlobalExceptionHandler  :: handleException ::", e.getMessage());
-//		return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+		log.error("GlobalExceptionHandler  :: Exception ::", e.getMessage());
 		return CommonUtil.createErrorResponseMessage(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<?> handleIllegalArgumentException(Exception e) {
+		log.error("GlobalExceptionHandler  :: IllegalArgumentException ::", e.getMessage());
+		return CommonUtil.createErrorResponseMessage(e.getMessage(), HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(NullPointerException.class)
 	public ResponseEntity<?> handleNullPointerException(Exception e) {
 		log.error("GlobalExceptionHandler  :: NullPointerException ::", e.getMessage());
-//		return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
 		return CommonUtil.createErrorResponseMessage(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 
 	}
@@ -34,32 +38,29 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<?> handleResourceNotFoundException(Exception e) {
 		log.error("GlobalExceptionHandler  :: ResourceNotFoundException ::", e.getMessage());
-//		return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
 		return CommonUtil.createErrorResponseMessage(e.getMessage(), HttpStatus.NOT_FOUND);
 
 	}
 
 	@ExceptionHandler(CategoryValidationException.class)
 	public ResponseEntity<?> handleCategoryValidationException(CategoryValidationException e) {
-//		return new ResponseEntity<>(e.getErrors(), HttpStatus.BAD_REQUEST);
 		return CommonUtil.createErrorResponse(e.getErrors(), HttpStatus.BAD_REQUEST);
 
 	}
 	
 	@ExceptionHandler(FileNotFoundException.class)
 	public ResponseEntity<?> handleFileNotFoundException(FileNotFoundException e) {
-//		return new ResponseEntity<>(e.getErrors(), HttpStatus.NOT_FOUND);
 		return CommonUtil.createErrorResponse(e.getMessage(), HttpStatus.NOT_FOUND);
 
 	}
 	
 	@ExceptionHandler(ExistDataException.class)
 	public ResponseEntity<?> handleExistDataException(ExistDataException e) {
-		return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+		return CommonUtil.createErrorResponse(e.getMessage(), HttpStatus.CONFLICT);
 	}
 	
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public ResponseEntity<?> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
-		return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		return CommonUtil.createErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
 	}
 }
