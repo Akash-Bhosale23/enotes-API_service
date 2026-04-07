@@ -1,6 +1,7 @@
 package com.codenza.enotes.service.impl;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.util.ObjectUtils;
 
 import com.codenza.enotes.dto.EmailRequest;
 import com.codenza.enotes.dto.UserDTO;
+import com.codenza.enotes.entity.AccountStatus;
 import com.codenza.enotes.entity.Role;
 import com.codenza.enotes.entity.User;
 import com.codenza.enotes.repository.RoleRepository;
@@ -41,8 +43,15 @@ public class UserServiceImpl implements UserService {
 
 		User user = mapper.map(userDTO, User.class);
 
-		serRole(userDTO, user);
+		setRole(userDTO, user);
+		
+		AccountStatus status=AccountStatus.builder()
+				.isActive(false)
+				.verificationCode(UUID.randomUUID().toString())
+				.build();
 
+		user.setStatus(status);
+		
 		User savedUser = userRespository.save(user);
 
 		if (!ObjectUtils.isEmpty(savedUser)) {
@@ -60,10 +69,13 @@ public class UserServiceImpl implements UserService {
 
 	private void emailSend(User savedUser) throws Exception {
 
-		String message = "Hi, <b>" + savedUser.getFirstName()
-				+ "</b> <br> Your account is registered successfully on Enotes <br>"
-				+ "<br> click the link below to verify your account <br>" + "<a href='#'>Click Here</a><br>"
+		String message = "Hi, <b>[[username]]</b> <br> Your account is registered successfully on Enotes <br>"
+				+ "<br> click the link below to verify your account <br>" + "<a href='[[url]]'>Click Here</a><br>"
 				+"<br>Thanks,<br> ENotes";
+		
+		message = message.replace("[[username]]", savedUser.getFirstName());
+		
+		message = message.replace("[[url]]", "http://localhost:8080/api/v1/verify?uid="+savedUser.getId()+"&&code"+savedUser.getStatus().getVerificationCode());
 
 		EmailRequest emailRequest = EmailRequest.builder().to(savedUser.getEmail())
 				.title("Account creation conformation").subject("Enotes account creation").message(message).build();
@@ -71,7 +83,7 @@ public class UserServiceImpl implements UserService {
 		mailService.sendEmail(emailRequest);
 	}
 
-	private void serRole(UserDTO userDTO, User user) {
+	private void setRole(UserDTO userDTO, User user) {
 
 		List<Integer> reqRoleId = userDTO.getRoles().stream().map(r -> r.getId()).toList();
 
