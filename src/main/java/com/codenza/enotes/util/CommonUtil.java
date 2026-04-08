@@ -4,6 +4,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.codenza.enotes.response.handler.GenericResponse;
 
@@ -80,4 +81,13 @@ public class CommonUtil {
 		}
 
 	}
+	
+    public static String buildVerificationUrl(Integer userId, String code) {
+        return ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/v1/home/verify")
+                .queryParam("uId", userId)
+                .queryParam("code", code)
+                .build()
+                .toUriString();
+    }
 }

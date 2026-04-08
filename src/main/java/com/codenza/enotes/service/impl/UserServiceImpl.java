@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.codenza.enotes.dto.EmailRequest;
 import com.codenza.enotes.dto.UserDTO;
@@ -16,6 +17,7 @@ import com.codenza.enotes.entity.User;
 import com.codenza.enotes.repository.RoleRepository;
 import com.codenza.enotes.repository.UserRespository;
 import com.codenza.enotes.service.UserService;
+import com.codenza.enotes.util.CommonUtil;
 import com.codenza.enotes.util.Validation;
 
 @Service
@@ -69,14 +71,18 @@ public class UserServiceImpl implements UserService {
 
 	private void emailSend(User savedUser) throws Exception {
 
+		  // This automatically builds the URL based on the current request
+        String verificationUrl = CommonUtil.buildVerificationUrl(savedUser.getId(), savedUser.getStatus().getVerificationCode());
+		
 		String message = "Hi, <b>[[username]]</b> <br> Your account is registered successfully on Enotes <br>"
 				+ "<br> click the link below to verify your account <br>" + "<a href='[[url]]'>Click Here</a><br>"
 				+"<br>Thanks,<br> ENotes";
 		
 		message = message.replace("[[username]]", savedUser.getFirstName());
 		
-		message = message.replace("[[url]]", "http://localhost:8080/api/v1/verify?uid="+savedUser.getId()+"&&code"+savedUser.getStatus().getVerificationCode());
+		message = message.replace("[[url]]", verificationUrl);
 
+		
 		EmailRequest emailRequest = EmailRequest.builder().to(savedUser.getEmail())
 				.title("Account creation conformation").subject("Enotes account creation").message(message).build();
 
