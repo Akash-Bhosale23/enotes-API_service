@@ -8,6 +8,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.codenza.enotes.response.handler.GenericResponse;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 public class CommonUtil {
 
 	public static ResponseEntity<?> createBuildResponse(Object data, HttpStatus status){
@@ -89,5 +91,14 @@ public class CommonUtil {
                 .queryParam("code", code)
                 .build()
                 .toUriString();
+    }
+    
+    
+    // this method written manually from chatGPT
+    public static String getUrl(HttpServletRequest request) {
+
+        String apiUrl = request.getRequestURL().toString();
+
+        return apiUrl.replace(request.getServletPath(), "");
     }
 }
