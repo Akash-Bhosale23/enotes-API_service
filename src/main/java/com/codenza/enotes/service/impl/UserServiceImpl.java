@@ -23,6 +23,7 @@ import com.codenza.enotes.entity.User;
 import com.codenza.enotes.repository.RoleRepository;
 import com.codenza.enotes.repository.UserRespository;
 import com.codenza.enotes.security.CustomUserDetails;
+import com.codenza.enotes.service.JwtService;
 import com.codenza.enotes.service.UserService;
 import com.codenza.enotes.util.CommonUtil;
 import com.codenza.enotes.util.Validation;
@@ -52,6 +53,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private JwtService jwtService;
 
 	@Override
 	public Boolean register(UserDTO userDTO, String url) throws Exception {
@@ -121,7 +125,7 @@ public class UserServiceImpl implements UserService {
 		
 		if(authenticate.isAuthenticated()) {
 			CustomUserDetails customUserDetails = (CustomUserDetails) authenticate.getPrincipal();
-			String token="dfjdjkkfjdlkfjdkjfhdlkfjdklfjkjhaier";
+			String token=jwtService.generateToken(customUserDetails.getUser());
 			
 			LoginResponse loginResponse =LoginResponse.builder()
 					.user(mapper.map(customUserDetails.getUser(), UserDTO.class))

@@ -13,8 +13,8 @@ spring:
 
   mail:
     host: smtp.gmail.com
-    username: abhosale5010@gmail.com
-    password: wgch tsjz qteo mcru
+    username: "abhosale5010@gmail.com"
+    password: "wgch tsjz qteo mcru"
     port: 587
     properties:
       mail:
@@ -23,8 +23,10 @@ spring:
           starttls:
             enable: true 
 
-
 file:
   upload:
     path: notes/
+
+jwt:
+  secret: "myverystrongsecretkeymyverystrongsecretkey1234567890"
 
