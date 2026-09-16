@@ -12,9 +12,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.codenza.enotes.entity.User;
+import com.codenza.enotes.exceptions.JwtAuthenticationException;
+import com.codenza.enotes.exceptions.JwtExpiredException;
 import com.codenza.enotes.service.JwtService;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -34,13 +38,9 @@ public class JwtServiceImpl implements JwtService {
 		claims.put("role", user.getRoles());
 		claims.put("status", user.getStatus().getIsActive());
 
-		String token = Jwts.builder()
-				.claims(claims)
-				.subject(user.getEmail())
+		String token = Jwts.builder().claims(claims).subject(user.getEmail())
 				.issuedAt(new Date(System.currentTimeMillis()))
-				.expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
-				.signWith(getKey())
-				.compact();
+				.expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)).signWith(getKey()).compact();
 
 		return token;
 	}
@@ -55,13 +55,13 @@ public class JwtServiceImpl implements JwtService {
 
 	@Override
 	public String extractUsername(String token) {
-		
-		Claims claims= extractAllClaims(token);
-		
+
+		Claims claims = extractAllClaims(token);
+
 		return claims.getSubject();
-		
+
 	}
-	
+
 	public String role(String token) {
 
 		Claims claims = extractAllClaims(token);
@@ -70,43 +70,48 @@ public class JwtServiceImpl implements JwtService {
 	}
 
 	private Claims extractAllClaims(String token) {
-		
-		Claims claims=Jwts.parser()
-				.verifyWith(decryptKey(secretKey))
-				.build()
-				.parseSignedClaims(token)
-				.getPayload();
-		
-		return claims;
+
+		try {
+
+			return Jwts.parser().verifyWith(decryptKey(secretKey)).build().parseSignedClaims(token).getPayload();
+
+		} catch (ExpiredJwtException e) {
+			throw new JwtExpiredException("Your JWT token is expired");
+		} catch (JwtException e) {
+			throw new JwtAuthenticationException("Invalid JWT");
+		} catch (Exception e) {
+			throw e;
+		}
+
 	}
 
 	private SecretKey decryptKey(String secretKey) {
-		
-		byte[] keyBytes= Decoders.BASE64.decode(secretKey);
-		
+
+		byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+
 		return Keys.hmacShaKeyFor(keyBytes);
 	}
 
 	@Override
 	public Boolean validateToken(String token, UserDetails userDetails) {
-		
+
 		String username = extractUsername(token);
-		
-		Boolean isExpired= isTokenExpired(token);
-		
-		if(username.equalsIgnoreCase(userDetails.getUsername())&& !isExpired) {
+
+		Boolean isExpired = isTokenExpired(token);
+
+		if (username.equalsIgnoreCase(userDetails.getUsername()) && !isExpired) {
 			return true;
 		}
-		
+
 		return false;
 	}
 
 	private Boolean isTokenExpired(String token) {
-		
+
 		Claims claims = extractAllClaims(token);
-		
+
 		Date expiryDate = claims.getExpiration();
-		
+
 		return expiryDate.before(new Date());
 	}
 
