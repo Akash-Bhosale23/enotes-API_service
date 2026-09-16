@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.codenza.enotes.dto.LoginRequest;
 import com.codenza.enotes.dto.LoginResponse;
-import com.codenza.enotes.dto.UserDTO;
+import com.codenza.enotes.dto.UserRequest;
 import com.codenza.enotes.service.UserService;
 import com.codenza.enotes.util.CommonUtil;
 
@@ -25,7 +25,7 @@ public class AuthController {
 	private UserService userService;
 
 	@PostMapping("/register")
-	public ResponseEntity<?> register(@RequestBody UserDTO userDTO, HttpServletRequest request) throws Exception{
+	public ResponseEntity<?> register(@RequestBody UserRequest userDTO, HttpServletRequest request) throws Exception{
 		
 		String url=CommonUtil.getUrl(request);
 		

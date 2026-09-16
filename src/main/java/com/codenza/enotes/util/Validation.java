@@ -13,7 +13,7 @@ import org.springframework.util.StringUtils;
 import com.codenza.enotes.dto.CategoryDTO;
 import com.codenza.enotes.dto.TodoDTO;
 import com.codenza.enotes.dto.TodoDTO.StatusDTO;
-import com.codenza.enotes.dto.UserDTO;
+import com.codenza.enotes.dto.UserRequest;
 import com.codenza.enotes.enums.TodoStatus;
 import com.codenza.enotes.exceptions.CategoryValidationException;
 import com.codenza.enotes.exceptions.ExistDataException;
@@ -88,7 +88,7 @@ public class Validation {
 		}
 	}
 
-	public void userValidation(UserDTO userDTO) {
+	public void userValidation(UserRequest userDTO) {
 
 		if (!StringUtils.hasText(userDTO.getFirstName())) {
 			throw new IllegalArgumentException("First name is invalid");

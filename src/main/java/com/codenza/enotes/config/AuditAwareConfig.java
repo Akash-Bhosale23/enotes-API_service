@@ -4,12 +4,17 @@ import java.util.Optional;
 
 import org.springframework.data.domain.AuditorAware;
 
+import com.codenza.enotes.entity.User;
+import com.codenza.enotes.util.CommonUtil;
+
 public class AuditAwareConfig implements AuditorAware<Integer>{
 
 	@Override
 	public Optional<Integer> getCurrentAuditor() {
+		
+		User loggedInUser = CommonUtil.getLoggedInUser();
 	
-		return Optional.of(1);	}
+		return Optional.of(loggedInUser.getId());	}
 	
 
 }
