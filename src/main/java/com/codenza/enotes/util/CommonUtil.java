@@ -4,9 +4,13 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.codenza.enotes.dto.UserResponse;
+import com.codenza.enotes.entity.User;
 import com.codenza.enotes.response.handler.GenericResponse;
+import com.codenza.enotes.security.CustomUserDetails;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -84,6 +88,7 @@ public class CommonUtil {
 
 	}
 	
+    // this method written manually from chatGPT
     public static String buildVerificationUrl(Integer userId, String code) {
         return ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/api/v1/home/verify")
@@ -94,11 +99,23 @@ public class CommonUtil {
     }
     
     
-    // this method written manually from chatGPT
     public static String getUrl(HttpServletRequest request) {
 
         String apiUrl = request.getRequestURL().toString();
 
         return apiUrl.replace(request.getServletPath(), "");
+    }
+    
+	public static User getLoggedInUser() {
+
+		try {
+			CustomUserDetails loggedInUser = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication()
+					.getPrincipal();
+
+			return loggedInUser.getUser();
+		} catch (Exception e) {
+			throw e;
+		}
+    	
     }
 }

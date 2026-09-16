@@ -42,6 +42,7 @@ import com.codenza.enotes.repository.FavouriteNoteRepository;
 import com.codenza.enotes.repository.FileRepository;
 import com.codenza.enotes.repository.NoteRepository;
 import com.codenza.enotes.service.NoteService;
+import com.codenza.enotes.util.CommonUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
@@ -204,7 +205,9 @@ public class NoteServiceImpl implements NoteService {
 	}
 
 	@Override
-	public NoteResponse getAllNotesByUser(Integer userId, Integer pageNo, Integer pageSize) {
+	public NoteResponse getAllNotesByUser(Integer pageNo, Integer pageSize) {
+		
+		Integer userId= CommonUtil.getLoggedInUser().getId();
 		
 		Pageable pagable = PageRequest.of(pageNo, pageSize);
 	
@@ -245,7 +248,9 @@ public class NoteServiceImpl implements NoteService {
 	}
 
 	@Override
-	public List<NoteDTO> getNotesFromRecycleBin(Integer userId) {
+	public List<NoteDTO> getNotesFromRecycleBin() {
+		
+		Integer userId= CommonUtil.getLoggedInUser().getId();
 		
 		List<Note> recycleNotes = noteRepository.findByCreatedByAndIsDeletedTrue(userId);
 		
@@ -267,8 +272,9 @@ public class NoteServiceImpl implements NoteService {
 	}
 
 	@Override
-	public void deleteNotesFromRecycleBin(Integer userId) {
+	public void deleteNotesFromRecycleBin() {
 	
+		Integer userId= CommonUtil.getLoggedInUser().getId();
 		List<Note> recycleNotes = noteRepository.findByCreatedByAndIsDeletedTrue(userId);
 		
 		if(!CollectionUtils.isEmpty(recycleNotes)) {
@@ -280,7 +286,7 @@ public class NoteServiceImpl implements NoteService {
 	@Override
 	public void favouriteNotes(Integer noteId) throws Exception {
 		
-		int userId=1;
+		Integer userId= CommonUtil.getLoggedInUser().getId();
 		
 		Note note = noteRepository.findById(noteId).orElseThrow(()-> new ResourceNotFoundException("Note not found with id : "+noteId));
 		
@@ -307,7 +313,7 @@ public class NoteServiceImpl implements NoteService {
 	@Override
 	public List<FavouriteNoteDTO> getFavouriteNotes() throws Exception {
 		
-		int userId=1;
+		Integer userId= CommonUtil.getLoggedInUser().getId();
 		
 		List<FavouriteNote> favouriteNotes = favouriteNoteRepository.findByUserId(userId);
 		

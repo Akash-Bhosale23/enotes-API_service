@@ -17,6 +17,7 @@ import com.codenza.enotes.enums.TodoStatus;
 import com.codenza.enotes.exceptions.ResourceNotFoundException;
 import com.codenza.enotes.repository.TodoRepository;
 import com.codenza.enotes.service.TodoService;
+import com.codenza.enotes.util.CommonUtil;
 import com.codenza.enotes.util.Validation;
 
 @Service
@@ -73,9 +74,9 @@ public class TodoServiceImpl implements TodoService {
 	}
 
 	@Override
-	public List<TodoDTO> getAllTodos() {
+	public List<TodoDTO> getAllTodosByUser() {
 		
-		Integer userId=1;
+		Integer userId= CommonUtil.getLoggedInUser().getId();
 		
 		List<Todo> todos= todoRepository.findByCreatedBy(userId);
 		

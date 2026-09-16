@@ -16,7 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.codenza.enotes.dto.EmailRequest;
 import com.codenza.enotes.dto.LoginRequest;
 import com.codenza.enotes.dto.LoginResponse;
-import com.codenza.enotes.dto.UserDTO;
+import com.codenza.enotes.dto.UserRequest;
 import com.codenza.enotes.entity.AccountStatus;
 import com.codenza.enotes.entity.Role;
 import com.codenza.enotes.entity.User;
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
 	private JwtService jwtService;
 
 	@Override
-	public Boolean register(UserDTO userDTO, String url) throws Exception {
+	public Boolean register(UserRequest userDTO, String url) throws Exception {
 
 		validation.userValidation(userDTO);
 
@@ -110,7 +110,7 @@ public class UserServiceImpl implements UserService {
 		mailService.sendEmail(emailRequest);
 	}
 
-	private void setRole(UserDTO userDTO, User user) {
+	private void setRole(UserRequest userDTO, User user) {
 
 		List<Integer> reqRoleId = userDTO.getRoles().stream().map(r -> r.getId()).toList();
 
@@ -128,7 +128,7 @@ public class UserServiceImpl implements UserService {
 			String token=jwtService.generateToken(customUserDetails.getUser());
 			
 			LoginResponse loginResponse =LoginResponse.builder()
-					.user(mapper.map(customUserDetails.getUser(), UserDTO.class))
+					.user(mapper.map(customUserDetails.getUser(), UserRequest.class))
 					.token(token)
 					.build();
 			return loginResponse;

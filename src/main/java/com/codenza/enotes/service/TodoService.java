@@ -10,6 +10,6 @@ public interface TodoService {
 	
 	TodoDTO getTodoById(Integer id) throws Exception;
 	
-	List<TodoDTO> getAllTodos();
+	List<TodoDTO> getAllTodosByUser();
 	
 }

@@ -21,17 +21,17 @@ public interface NoteService {
 
 	public FileDetails getFileDetails(Integer id) throws Exception;
 
-	public NoteResponse getAllNotesByUser(Integer userId, Integer pageNo, Integer pageSize);
+	public NoteResponse getAllNotesByUser(Integer pageNo, Integer pageSize);
 
 	public void softDelete(Integer id) throws Exception;
 
 	public void restoreNote(Integer id) throws Exception;
 
-	public List<NoteDTO> getNotesFromRecycleBin(Integer userId);
+	public List<NoteDTO> getNotesFromRecycleBin();
 
 	public void hardDelete(Integer id) throws Exception;
 
-	public void deleteNotesFromRecycleBin(Integer userId);
+	public void deleteNotesFromRecycleBin();
 	
 	public void favouriteNotes(Integer noteId) throws Exception ;
 	

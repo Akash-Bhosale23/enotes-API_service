@@ -42,7 +42,7 @@ public class TodoController {
 	
 	@GetMapping("/{id}")
 	@PreAuthorize("hasRole('USER')")
-	public ResponseEntity<?> getTodoById(@PathVariable Integer id) throws Exception{
+	public ResponseEntity<?> getTodoByUserId(@PathVariable Integer id) throws Exception{
 		
 		TodoDTO todo = todoService.getTodoById(id);
 		
@@ -59,7 +59,7 @@ public class TodoController {
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<?> getAllTodos() {
 
-		List<TodoDTO> allTodos = todoService.getAllTodos();
+		List<TodoDTO> allTodos = todoService.getAllTodosByUser();
 
 		if (CollectionUtils.isEmpty(allTodos)) {
 			return ResponseEntity.noContent().build();
