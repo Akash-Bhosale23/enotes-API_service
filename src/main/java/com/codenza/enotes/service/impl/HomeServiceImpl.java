@@ -7,14 +7,14 @@ import com.codenza.enotes.entity.AccountStatus;
 import com.codenza.enotes.entity.User;
 import com.codenza.enotes.exceptions.ResourceNotFoundException;
 import com.codenza.enotes.exceptions.SuccessException;
-import com.codenza.enotes.repository.UserRespository;
+import com.codenza.enotes.repository.UserRepository;
 import com.codenza.enotes.service.HomeService;
 
 @Service
 public class HomeServiceImpl implements HomeService{
 	
 	@Autowired
-	private UserRespository userRepository;
+	private UserRepository userRepository;
 
 	@Override
 	public Boolean verifyAccount(Integer uid, String verificationCode) throws Exception {

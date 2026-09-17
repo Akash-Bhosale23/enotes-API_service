@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.codenza.enotes.entity.User;
 
-public interface UserRespository extends JpaRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<User, Integer> {
 
 	Boolean existsByEmail(String email);
 

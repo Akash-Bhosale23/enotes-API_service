@@ -7,18 +7,18 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.codenza.enotes.entity.User;
-import com.codenza.enotes.repository.UserRespository;
+import com.codenza.enotes.repository.UserRepository;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 	
 	@Autowired
-	private UserRespository userRespository;
+	private UserRepository userRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-		User user = userRespository.findByEmail(username);
+		User user = userRepository.findByEmail(username);
 		
 		if(user==null) {
 			
