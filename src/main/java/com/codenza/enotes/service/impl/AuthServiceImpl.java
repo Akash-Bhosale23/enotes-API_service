@@ -81,7 +81,7 @@ public class AuthServiceImpl implements AuthService {
 		if (!ObjectUtils.isEmpty(savedUser)) {
 
 			// send email
-			emailSend(savedUser);
+			registrationSendEmail(savedUser);
 
 			return true;
 		} else {
@@ -91,7 +91,7 @@ public class AuthServiceImpl implements AuthService {
 
 	}
 
-	private void emailSend(User savedUser) throws Exception {
+	private void registrationSendEmail(User savedUser) throws Exception {
 
 		  // This automatically builds the URL based on the current request
         String verificationUrl = CommonUtil.buildVerificationUrl(savedUser.getId(), savedUser.getStatus().getVerificationCode());
@@ -106,7 +106,7 @@ public class AuthServiceImpl implements AuthService {
 
 		
 		EmailRequest emailRequest = EmailRequest.builder().to(savedUser.getEmail())
-				.title("Account creation conformation").subject("Enotes account creation").message(message).build();
+				.title("Account creation confirmation").subject("Enotes account creation").message(message).build();
 
 		mailService.sendEmail(emailRequest);
 	}
