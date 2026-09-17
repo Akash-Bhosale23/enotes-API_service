@@ -19,7 +19,7 @@ import com.codenza.enotes.exceptions.CategoryValidationException;
 import com.codenza.enotes.exceptions.ExistDataException;
 import com.codenza.enotes.exceptions.ResourceNotFoundException;
 import com.codenza.enotes.repository.RoleRepository;
-import com.codenza.enotes.repository.UserRespository;
+import com.codenza.enotes.repository.UserRepository;
 
 @Component
 public class Validation {
@@ -28,7 +28,7 @@ public class Validation {
 	private RoleRepository roleRepository;
 	
 	@Autowired
-	private UserRespository userRespository;
+	private UserRepository userRepository;
 
 	public void categoryValidation(CategoryDTO categoryDTO) {
 
@@ -102,7 +102,7 @@ public class Validation {
 			throw new IllegalArgumentException("Email is invalid");
 		}else {
 			// check email is already exists or not
-			Boolean existEmail= userRespository.existsByEmail(userDTO.getEmail());
+			Boolean existEmail= userRepository.existsByEmail(userDTO.getEmail());
 			
 			if(existEmail) {
 				throw new ExistDataException("Email is already exist");
