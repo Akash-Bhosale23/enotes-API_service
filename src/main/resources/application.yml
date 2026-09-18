@@ -1,36 +1,100 @@
-#spring:
-#  application:
-#    name: ENotes_API_Service
-#
-#  datasource:
-#    url: jdbc:mysql://localhost:3306/e_notes
-#    username: root
-#    password: 1999redmi3s
-#
-#  jpa:
-#    hibernate:
-#      ddl-auto: none
-#
-#  mail:
-#    host: smtp.gmail.com
-#    username: "abhosale5010@gmail.com"
-#    password: "wgch tsjz qteo mcru"
-#    port: 587
-#    properties:
-#      mail:
-#        smtp:
-#          auth: true
-#          starttls:
-#            enable: true 
-#
-#file:
-#  upload:
-#    path: notes/
-#
-#jwt:
-#  secret: "myverystrongsecretkeymyverystrongsecretkey1234567890"
-#
-
+# ===== Common/default config (applies to all profiles) =====
 spring:
+  application:
+    name: ENotes_API_Service
   profiles:
-    active: uat
+    active: test
+
+
+
+# Shared mail config (same across all profiles here, so define once)  
+  mail:
+    host: smtp.gmail.com
+    username: abhosale5010@gmail.com
+    password: "wgch tsjz qteo mcru"
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+file:
+  upload:
+    path: notes/
+
+jwt:
+  secret: myverystrongsecretkeymyverystrongsecretkey1234567890
+---
+# ===== DEV profile =====
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:mysql://localhost:3306/e_notes_dev
+    username: root
+    password: 1999redmi3s
+  jpa:
+    hibernate:
+      ddl-auto: none
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+---
+# ===== TEST profile =====
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    url: jdbc:mysql://localhost:3306/e_notes_test
+    username: root
+    password: 1999redmi3s
+  jpa:
+    hibernate:
+      ddl-auto: none
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+---
+# ===== UAT profile =====
+spring:
+  config:
+    activate:
+      on-profile: uat
+  datasource:
+    url: jdbc:mysql://localhost:3306/e_notes_uat
+    username: root
+    password: 1999redmi3s
+  jpa:
+    hibernate:
+      ddl-auto: none
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+        
+
+---
+# ===== PROD profile =====
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: jdbc:mysql://localhost:3306/e_notes_prod
+    username: root
+    password: 1999redmi3s
+  jpa:
+    hibernate:
+      ddl-auto: none
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
