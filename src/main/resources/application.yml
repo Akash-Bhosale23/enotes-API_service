@@ -3,7 +3,7 @@ spring:
   application:
     name: ENotes_API_Service
   profiles:
-    active: uat
+    active: prod
 
 
 
