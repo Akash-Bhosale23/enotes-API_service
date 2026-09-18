@@ -227,6 +227,32 @@ public class NoteServiceImpl implements NoteService {
 		
 		return notes;
 	}
+	
+	
+
+	@Override
+	public NoteResponse getNotesSearchByUser(Integer pageNo, Integer pageSize, String keyword) {
+		
+		Integer userId= CommonUtil.getLoggedInUser().getId();
+		
+		Pageable pagable = PageRequest.of(pageNo, pageSize);
+	
+		Page<Note> pageNotes= noteRepository.searchNotes(keyword, userId, pagable); 
+		
+		List<NoteDTO> noteDto= pageNotes.get().map(n->mapper.map(n, NoteDTO.class)).toList();
+		
+		NoteResponse notes= NoteResponse.builder()
+		.notes(noteDto)
+		.pageNo(pageNotes.getNumber())
+		.pageSize(pageNotes.getSize())
+		.totalElement(pageNotes.getTotalElements())
+		.totalPages(pageNotes.getTotalPages())
+		.isFirst(pageNotes.isFirst())
+		.isLast(pageNotes.isLast())
+		.build();
+		
+		return notes;
+	}
 
 	@Override
 	public void softDelete(Integer id) throws Exception {

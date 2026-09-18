@@ -92,6 +92,20 @@ public class NoteController {
 		return CommonUtil.createBuildResponse(notes, HttpStatus.OK);
 	}
 	
+	@GetMapping("/search")
+	@PreAuthorize("hasRole('USER')")
+	public ResponseEntity<?> getNotesSearchByUser(@RequestParam(name="key", defaultValue = "") String key, @RequestParam(name="pageNo", defaultValue = "0") Integer pageNo, @RequestParam(name="pageSize", defaultValue = "10") Integer pageSize)
+	{
+		
+		NoteResponse notes = noteService.getNotesSearchByUser(pageNo, pageSize,key);
+		
+		if(ObjectUtils.isEmpty(notes)) {
+		return	ResponseEntity.noContent().build();			
+		}
+		return CommonUtil.createBuildResponse(notes, HttpStatus.OK);
+	}
+	
+	
 	@DeleteMapping("/soft-delete/{id}")
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<?> softDeleteNoteById(@PathVariable Integer id) throws Exception{
