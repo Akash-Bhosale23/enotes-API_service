@@ -1,5 +1,7 @@
 package com.codenza.enotes.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,8 @@ import jakarta.servlet.http.HttpServletRequest;
 @RequestMapping("/api/v1/home")
 public class HomeController {
 	
+	Logger log= LoggerFactory.getLogger(HomeController.class);
+	
 	@Autowired
 	private HomeService homeService;
 	
@@ -31,12 +35,15 @@ public class HomeController {
 	@GetMapping("/verify")
 	public ResponseEntity<?> verifyUserAccount(@RequestParam Integer uId, @RequestParam String code) throws Exception{
 		
+		log.info("HomeController : verifyUserAccount() : Execution start");
+		
 		Boolean verifyAccount = homeService.verifyAccount(uId, code);
 		
 		if(verifyAccount) {
 			return CommonUtil.createBuildResponseMessage("Account verification success", HttpStatus.OK);
 		}
 		
+		log.info("HomeController : verifyUserAccount : Execution end");
 		return CommonUtil.createErrorResponseMessage("Incorrect credencials", HttpStatus.BAD_REQUEST);
 	}
 	

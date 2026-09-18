@@ -30,7 +30,9 @@ import com.codenza.enotes.util.CommonUtil;
 import com.codenza.enotes.util.Validation;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -60,7 +62,8 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	public Boolean register(UserRequest userDTO, String url) throws Exception {
-
+		log.info("AuthServiceImpl : register() : Execution start");
+		
 		validation.userValidation(userDTO);
 
 		User user = mapper.map(userDTO, User.class);
@@ -78,16 +81,19 @@ public class AuthServiceImpl implements AuthService {
 		
 		User savedUser = userRepository.save(user);
 
-		if (!ObjectUtils.isEmpty(savedUser)) {
-
-			// send email
-			registrationSendEmail(savedUser);
-
-			return true;
-		} else {
-
+		if (ObjectUtils.isEmpty(savedUser)) {
+			log.info("Error message : {} ","User not saved");
 			return false;
 		}
+		
+		log.info("Success message : {} ","User register success");
+		
+		// send email
+		registrationSendEmail(savedUser);
+		
+		log.info("Success message : {} ","Email send success");
+		log.info("AuthServiceImpl : register() : Execution end");
+		return true;
 
 	}
 

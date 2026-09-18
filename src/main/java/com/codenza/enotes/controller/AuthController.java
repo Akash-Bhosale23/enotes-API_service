@@ -16,7 +16,9 @@ import com.codenza.enotes.service.AuthService;
 import com.codenza.enotes.util.CommonUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
@@ -27,18 +29,19 @@ public class AuthController {
 	@PostMapping("/register")
 	public ResponseEntity<?> register(@RequestBody UserRequest userDTO, HttpServletRequest request) throws Exception{
 		
+		log.info("AuthController : register() : Execution start");
 		String url=CommonUtil.getUrl(request);
 		
 		Boolean register = authService.register(userDTO,url);
 		
-		if(register) {
-			return CommonUtil.createBuildResponseMessage("User Registered Success", HttpStatus.CREATED);
-		}
-		else {
+		if(!register) {
+			log.info("Error message : {} ", "Registration failed");
 			return CommonUtil.createErrorResponseMessage("Registration failed", HttpStatus.INTERNAL_SERVER_ERROR);
-
 		}
-		
+		log.info("AuthController : register() : Execution end");
+		return CommonUtil.createBuildResponseMessage("User Registered Success", HttpStatus.CREATED);
+			
+
 	}
 	
 	@PostMapping("/login")

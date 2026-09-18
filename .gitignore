@@ -38,4 +38,8 @@ notes/
 *.jpg 
 *.png 
 "application.yml" 
-"application.yml" 
+
+### Logs ###
+log/
+logs/
+*.log

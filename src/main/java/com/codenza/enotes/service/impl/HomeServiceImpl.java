@@ -10,6 +10,9 @@ import com.codenza.enotes.exceptions.SuccessException;
 import com.codenza.enotes.repository.UserRepository;
 import com.codenza.enotes.service.HomeService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class HomeServiceImpl implements HomeService{
 	
@@ -19,9 +22,11 @@ public class HomeServiceImpl implements HomeService{
 	@Override
 	public Boolean verifyAccount(Integer uid, String verificationCode) throws Exception {
 		
+		log.info("HomeServiceImpl : verifyAccount() : start");
 		User user = userRepository.findById(uid).orElseThrow(()->new ResourceNotFoundException("Invalid user"));
 		
 		if(user.getStatus().getVerificationCode()==null) {
+			log.info("Message : Account is already verified");
 			throw new SuccessException("Account is already verified");
 		}
 		
@@ -31,10 +36,12 @@ public class HomeServiceImpl implements HomeService{
 			status.setVerificationCode(null);
 			
 			userRepository.save(user);
-			
+			log.info("Message : Account verification success");
+
 			return true;
 		}
-		
+		log.info("HomeServiceImpl : verifyAccount() : end");
+
 		return false;
 	}
 
