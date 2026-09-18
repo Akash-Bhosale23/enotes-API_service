@@ -1,0 +1,48 @@
+package com.codenza.enotes.service;
+
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.codenza.enotes.dto.FavouriteNoteDTO;
+import com.codenza.enotes.dto.NoteDTO;
+import com.codenza.enotes.dto.NoteResponse;
+import com.codenza.enotes.entity.FavouriteNote;
+import com.codenza.enotes.entity.FileDetails;
+import com.codenza.enotes.exceptions.ResourceNotFoundException;
+
+public interface NoteService {
+
+	public Boolean saveNote(String notes, MultipartFile file) throws Exception;
+	
+	List<NoteDTO> getAllNotes();
+
+	public byte[] downloadFile(FileDetails fileDetails) throws Exception;
+
+	public FileDetails getFileDetails(Integer id) throws Exception;
+
+	public NoteResponse getAllNotesByUser(Integer pageNo, Integer pageSize);
+	
+	public NoteResponse getNotesSearchByUser(Integer pageNo, Integer pageSize, String keyword);
+
+	public void softDelete(Integer id) throws Exception;
+
+	public void restoreNote(Integer id) throws Exception;
+
+	public List<NoteDTO> getNotesFromRecycleBin();
+
+	public void hardDelete(Integer id) throws Exception;
+
+	public void deleteNotesFromRecycleBin();
+	
+	public void favouriteNotes(Integer noteId) throws Exception ;
+	
+	public void unFavouriteNotes(Integer noteId) throws Exception;
+	
+	public List<FavouriteNoteDTO> getFavouriteNotes() throws Exception;
+
+	public Boolean copyNote(Integer noteId) throws Exception;
+	
+	
+	
+}

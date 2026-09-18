@@ -31,3 +31,11 @@ build/
 
 ### VS Code ###
 .vscode/
+notes/ 
+*.jpeg 
+notes/ 
+*.jpeg 
+*.jpg 
+*.png 
+"application.yml" 
+"application.yml" 
