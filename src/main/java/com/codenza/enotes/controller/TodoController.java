@@ -16,18 +16,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codenza.enotes.dto.TodoDTO;
+import com.codenza.enotes.endpoints.TodoEndpoint;
 import com.codenza.enotes.service.TodoService;
 import com.codenza.enotes.util.CommonUtil;
 
 @RestController
-@RequestMapping("/api/v1/todos")
-public class TodoController {
+public class TodoController implements TodoEndpoint {
 
 	@Autowired
 	private TodoService todoService;
 	
-	@PostMapping("/create")
-	@PreAuthorize("hasRole('USER')")
+	@Override
 	public ResponseEntity<?> createTodo(@RequestBody TodoDTO todoDTO) throws Exception{
 		
 		Boolean savedTodo = todoService.saveTodo(todoDTO);
@@ -40,8 +39,7 @@ public class TodoController {
 		
 	}
 	
-	@GetMapping("/{id}")
-	@PreAuthorize("hasRole('USER')")
+	@Override
 	public ResponseEntity<?> getTodoByUserId(@PathVariable Integer id) throws Exception{
 		
 		TodoDTO todo = todoService.getTodoById(id);
@@ -55,8 +53,7 @@ public class TodoController {
 		}
 	}
 	
-	@GetMapping()
-	@PreAuthorize("hasRole('USER')")
+	@Override
 	public ResponseEntity<?> getAllTodos() {
 
 		List<TodoDTO> allTodos = todoService.getAllTodosByUser();

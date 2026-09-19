@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.codenza.enotes.dto.PasswordChangeRequest;
 import com.codenza.enotes.dto.UserResponse;
+import com.codenza.enotes.endpoints.UserEndpoint;
 import com.codenza.enotes.entity.User;
 import com.codenza.enotes.service.UserService;
 import com.codenza.enotes.util.CommonUtil;
 
 @RestController
-@RequestMapping("/api/v1/user")
-public class UserController {
+public class UserController implements UserEndpoint{
 
 	@Autowired
 	private ModelMapper mapper;
@@ -26,7 +26,7 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@GetMapping("/profile")
+	@Override
 	public ResponseEntity<?> getProfile() {
 
 		User loggedInUser = CommonUtil.getLoggedInUser();
@@ -35,7 +35,7 @@ public class UserController {
 		return CommonUtil.createBuildResponse(userResponse, HttpStatus.OK);
 	}
 
-	@PostMapping("/change-pswd")
+	@Override
 	public ResponseEntity<?> changePassword(@RequestBody PasswordChangeRequest changeRequest) {
 
 		userService.changePassword(changeRequest);

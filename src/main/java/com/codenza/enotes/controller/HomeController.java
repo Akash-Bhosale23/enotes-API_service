@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codenza.enotes.dto.PswdResetRequest;
+import com.codenza.enotes.endpoints.HomeEndpoint;
 import com.codenza.enotes.exceptions.ResourceNotFoundException;
 import com.codenza.enotes.service.HomeService;
 import com.codenza.enotes.service.UserService;
@@ -21,8 +22,7 @@ import com.codenza.enotes.util.CommonUtil;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/api/v1/home")
-public class HomeController {
+public class HomeController implements HomeEndpoint{
 	
 	Logger log= LoggerFactory.getLogger(HomeController.class);
 	
@@ -32,7 +32,7 @@ public class HomeController {
 	@Autowired
 	private UserService userService;
 
-	@GetMapping("/verify")
+	@Override
 	public ResponseEntity<?> verifyUserAccount(@RequestParam Integer uId, @RequestParam String code) throws Exception{
 		
 		log.info("HomeController : verifyUserAccount() : Execution start");
@@ -47,8 +47,7 @@ public class HomeController {
 		return CommonUtil.createErrorResponseMessage("Incorrect credencials", HttpStatus.BAD_REQUEST);
 	}
 	
-	
-	@PostMapping("/send-reset-email")
+	@Override
 	public ResponseEntity<?> sendPasswordResetEmail (@RequestParam String email, HttpServletRequest request) throws Exception{
 		
 		userService.sendPasswordResetEmail(email, request);
@@ -56,7 +55,7 @@ public class HomeController {
 		return CommonUtil.createBuildResponseMessage("Link is sent to your email...", HttpStatus.OK);
 	}
 	
-	@GetMapping("/verify-pswd-link")
+	@Override
 	public ResponseEntity<?> verifyPasswordResetLink (@RequestParam Integer uId, @RequestParam String code) throws Exception{
 		
 		userService.verifyPswdResetLink(uId, code);
@@ -64,8 +63,8 @@ public class HomeController {
 		return CommonUtil.createBuildResponseMessage("Link verified...", HttpStatus.OK);
 	}
 	
-	@PostMapping("/reset-pswd")
-	public ResponseEntity<?> resetPassword (@RequestBody  PswdResetRequest pswdResetRequest) throws ResourceNotFoundException{
+	@Override
+	public ResponseEntity<?> resetPassword (@RequestBody  PswdResetRequest pswdResetRequest) throws Exception{
 		userService.resetPassword(pswdResetRequest);
 		return CommonUtil.createBuildResponseMessage("Password reset successfully...", HttpStatus.OK);
 		

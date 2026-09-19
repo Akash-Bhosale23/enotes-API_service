@@ -18,20 +18,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.codenza.enotes.dto.CategoryDTO;
 import com.codenza.enotes.dto.CategoryResponseDTO;
+import com.codenza.enotes.endpoints.CategoryEndpoint;
 import com.codenza.enotes.entity.Category;
 import com.codenza.enotes.exceptions.ResourceNotFoundException;
 import com.codenza.enotes.service.CategoryService;
 import com.codenza.enotes.util.CommonUtil;
 
 @RestController
-@RequestMapping("/api/v1/category")
-public class CategoryController {
+public class CategoryController implements CategoryEndpoint {
 	
 	@Autowired
 	private CategoryService categoryService;
 
-	@PostMapping("/save")
-	@PreAuthorize("hasRole('ADMIN')")
+	@Override
 	public ResponseEntity<?> saveCategory (@RequestBody CategoryDTO catetoryDto){
 		
 		Boolean saveCategory= categoryService.saveCategory(catetoryDto);
@@ -47,8 +46,7 @@ public class CategoryController {
 		
 	}
 	
-	@GetMapping("/")
-	@PreAuthorize("hasRole('ADMIN')")
+	@Override
 	public ResponseEntity<?> getAllCategory(){
 		List<CategoryDTO> allCategory = categoryService.getAllCategory();
 		
@@ -62,8 +60,7 @@ public class CategoryController {
 			
 	}
 	
-	@GetMapping("/active")
-	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+	@Override
 	public ResponseEntity<?> getActiveCategory(){
 		List<CategoryResponseDTO> allCategory = categoryService.getActiveCategory();
 		
@@ -77,8 +74,7 @@ public class CategoryController {
 			
 	}
 	
-	@GetMapping("/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
+	@Override
 	public ResponseEntity<?> getCategoryById(@PathVariable Integer id) throws Exception{
 			CategoryDTO categoryDto= categoryService.getCategoryById(id);
 			
@@ -92,8 +88,7 @@ public class CategoryController {
 	
 	}
 	
-	@DeleteMapping("/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
+	@Override
 	public ResponseEntity<?> deleteCategoryById(@PathVariable Integer id){
 		
 		Boolean deleted = categoryService.deleteCategoryById(id);

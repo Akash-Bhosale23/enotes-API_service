@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.codenza.enotes.dto.LoginRequest;
 import com.codenza.enotes.dto.LoginResponse;
 import com.codenza.enotes.dto.UserRequest;
+import com.codenza.enotes.endpoints.AuthEndpoint;
 import com.codenza.enotes.service.AuthService;
 import com.codenza.enotes.util.CommonUtil;
 
@@ -20,13 +21,12 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/auth")
-public class AuthController {
+public class AuthController implements AuthEndpoint {
 	
 	@Autowired
 	private AuthService authService;
 
-	@PostMapping("/register")
+	@Override
 	public ResponseEntity<?> register(@RequestBody UserRequest userDTO, HttpServletRequest request) throws Exception{
 		
 		log.info("AuthController : register() : Execution start");
@@ -44,7 +44,7 @@ public class AuthController {
 
 	}
 	
-	@PostMapping("/login")
+	@Override
 	public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) throws Exception{
 		
 		LoginResponse loginResponse = authService.login(loginRequest);
