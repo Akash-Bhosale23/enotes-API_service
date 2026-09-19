@@ -10,20 +10,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.codenza.enotes.dto.TodoDTO;
 
+import static com.codenza.enotes.util.Constants.ROLE_USER;
+
 @RequestMapping("/api/v1/todos")
 public interface TodoEndpoint {
 
 	
 	@PostMapping("/create")
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize(ROLE_USER)
 	public ResponseEntity<?> createTodo(@RequestBody TodoDTO todoDTO) throws Exception;
 	
 	@GetMapping("/{id}")
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize(ROLE_USER)
 	public ResponseEntity<?> getTodoByUserId(@PathVariable Integer id) throws Exception;
 	
 	@GetMapping()
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize(ROLE_USER)
 	public ResponseEntity<?> getAllTodos();
 	
 	

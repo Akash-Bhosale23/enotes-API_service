@@ -11,27 +11,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.codenza.enotes.dto.CategoryDTO;
 
+import static com.codenza.enotes.util.Constants.ROLE_ADMIN;
+import static com.codenza.enotes.util.Constants.ROLE_ADMIN_USER;
+
 @RequestMapping("/api/v1/category")
 public interface CategoryEndpoint {
 
 	@PostMapping("/save")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize(ROLE_ADMIN)
 	public ResponseEntity<?> saveCategory (@RequestBody CategoryDTO catetoryDto);
 	
 	@GetMapping("/")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize(ROLE_ADMIN)
 	public ResponseEntity<?> getAllCategory();
 	
 	@GetMapping("/active")
-	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+	@PreAuthorize(ROLE_ADMIN_USER)
 	public ResponseEntity<?> getActiveCategory();
 	
 	@GetMapping("/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize(ROLE_ADMIN)
 	public ResponseEntity<?> getCategoryById(@PathVariable Integer id) throws Exception;
 	
 	@DeleteMapping("/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize(ROLE_ADMIN)
 	public ResponseEntity<?> deleteCategoryById(@PathVariable Integer id);
 	
 }
