@@ -1,8 +1,6 @@
 package com.codenza.enotes.security;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -23,14 +21,6 @@ public class CustomUserDetails implements UserDetails{
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		
-//		List<SimpleGrantedAuthority> authority= new ArrayList<>();
-//		
-//		user.getRoles().forEach(r->{
-//			authority.add(new SimpleGrantedAuthority(r.getName()));
-//		});
-//		
-//		return authority;
 		
 		 return user.getRoles().stream()
 	                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName()))

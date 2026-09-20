@@ -1,5 +1,11 @@
 package com.codenza.enotes.endpoints;
 
+import static com.codenza.enotes.util.Constants.DEFAULT_PAGE_NO;
+import static com.codenza.enotes.util.Constants.DEFAULT_PAGE_SIZE;
+import static com.codenza.enotes.util.Constants.ROLE_ADMIN;
+import static com.codenza.enotes.util.Constants.ROLE_ADMIN_USER;
+import static com.codenza.enotes.util.Constants.ROLE_USER;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.codenza.enotes.dto.NoteDTO;
 import com.codenza.enotes.dto.NoteRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,12 +24,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
-import static com.codenza.enotes.util.Constants.ROLE_ADMIN;
-import static com.codenza.enotes.util.Constants.ROLE_ADMIN_USER;
-import static com.codenza.enotes.util.Constants.ROLE_USER;
-import static com.codenza.enotes.util.Constants.DEFAULT_PAGE_NO;
-import static com.codenza.enotes.util.Constants.DEFAULT_PAGE_SIZE;
 
 @Tag(name = "Note", description = "APIs for creating, managing, searching and organizing user notes")
 @RequestMapping("/api/v1/note")

@@ -6,33 +6,28 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.LocalDate;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.commons.io.FilenameUtils;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import com.codenza.enotes.dto.FavouriteNoteDTO;
 import com.codenza.enotes.dto.NoteDTO;
 import com.codenza.enotes.dto.NoteDTO.CategoryDTO;
-import com.codenza.enotes.dto.NoteDTO.FileDTO;
 import com.codenza.enotes.dto.NoteResponse;
-import com.codenza.enotes.entity.Category;
 import com.codenza.enotes.entity.FavouriteNote;
 import com.codenza.enotes.entity.FileDetails;
 import com.codenza.enotes.entity.Note;
@@ -45,26 +40,26 @@ import com.codenza.enotes.service.NoteService;
 import com.codenza.enotes.util.CommonUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Service
 public class NoteServiceImpl implements NoteService {
 	
-	@Autowired
-	private NoteRepository noteRepository;
+	private final NoteRepository noteRepository;
 	
-	@Autowired
-	private CategoryRepository categoryRepository;
+	private final CategoryRepository categoryRepository;
 	
-	@Autowired
-	private ModelMapper mapper;
+	private final ModelMapper mapper;
 	
 	@Value("${file.upload.path}")
 	private String uploadPath;
 	
-	@Autowired
-	private FileRepository fileRepository;
+	private final FileRepository fileRepository;
 	
-	@Autowired
-	private FavouriteNoteRepository favouriteNoteRepository;
+	private final FavouriteNoteRepository favouriteNoteRepository;
+	
+	private final Clock clock;
 
 	@Override
 	public Boolean saveNote(String note, MultipartFile file) throws Exception {
@@ -189,7 +184,6 @@ public class NoteServiceImpl implements NoteService {
 
 	@Override
 	public byte[] downloadFile(FileDetails fileDetails) throws Exception {
-//		FileDetails fileDtls = fileRepository.findById(fileDetails.getId()).orElseThrow(()->new ResourceNotFoundException("File is not available"));
 		
 		InputStream io= new FileInputStream(fileDetails.getPath());
 		
@@ -259,7 +253,7 @@ public class NoteServiceImpl implements NoteService {
 		Note note = noteRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Note id is invalid.."));
 		
 		note.setIsDeleted(true);
-		note.setDeletedOn(LocalDateTime.now());
+		note.setDeletedOn(LocalDateTime.now(clock));
 		noteRepository.save(note);
 		
 	}

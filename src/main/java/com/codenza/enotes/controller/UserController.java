@@ -1,13 +1,8 @@
 package com.codenza.enotes.controller;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codenza.enotes.dto.PasswordChangeRequest;
@@ -17,14 +12,15 @@ import com.codenza.enotes.entity.User;
 import com.codenza.enotes.service.UserService;
 import com.codenza.enotes.util.CommonUtil;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @RestController
 public class UserController implements UserEndpoint{
 
-	@Autowired
-	private ModelMapper mapper;
+	private final ModelMapper mapper;
 
-	@Autowired
-	private UserService userService;
+	private final UserService userService;
 
 	@Override
 	public ResponseEntity<?> getProfile() {

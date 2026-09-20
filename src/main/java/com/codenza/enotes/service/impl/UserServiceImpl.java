@@ -19,18 +19,17 @@ import com.codenza.enotes.util.CommonUtil;
 
 import ch.qos.logback.core.util.StringUtil;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
 	
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+	private final PasswordEncoder passwordEncoder;
 
-	@Autowired
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
 	
-	@Autowired
-	private MailSenderService mailSenderService;
+	private final MailSenderService mailSenderService;
 	
 	@Override
 	public void changePassword(PasswordChangeRequest passwordChangeRequest) {

@@ -1,5 +1,7 @@
 package com.codenza.enotes.config;
 
+import java.time.Clock;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,5 +18,10 @@ public class ProjectConfig {
 	@Bean
 	AuditorAware<Integer> auditAware(){
 		return new AuditAwareConfig();
+	}
+	
+	@Bean
+	public Clock clock() {
+		return Clock.systemDefaultZone();
 	}
 }

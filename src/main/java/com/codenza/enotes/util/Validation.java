@@ -4,7 +4,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -21,14 +20,15 @@ import com.codenza.enotes.exceptions.ResourceNotFoundException;
 import com.codenza.enotes.repository.RoleRepository;
 import com.codenza.enotes.repository.UserRepository;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Component
 public class Validation {
 	
-	@Autowired
-	private RoleRepository roleRepository;
+	private final RoleRepository roleRepository;
 	
-	@Autowired
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
 
 	public void categoryValidation(CategoryDTO categoryDTO) {
 

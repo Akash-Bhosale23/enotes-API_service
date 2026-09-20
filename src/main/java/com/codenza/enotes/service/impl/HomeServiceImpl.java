@@ -1,6 +1,5 @@
 package com.codenza.enotes.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.codenza.enotes.entity.AccountStatus;
@@ -10,14 +9,15 @@ import com.codenza.enotes.exceptions.SuccessException;
 import com.codenza.enotes.repository.UserRepository;
 import com.codenza.enotes.service.HomeService;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+@RequiredArgsConstructor
 @Slf4j
 @Service
 public class HomeServiceImpl implements HomeService{
 	
-	@Autowired
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
 
 	@Override
 	public Boolean verifyAccount(Integer uid, String verificationCode) throws Exception {

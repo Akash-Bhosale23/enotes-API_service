@@ -1,12 +1,8 @@
 package com.codenza.enotes.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codenza.enotes.dto.LoginRequest;
@@ -17,14 +13,15 @@ import com.codenza.enotes.service.AuthService;
 import com.codenza.enotes.util.CommonUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+@RequiredArgsConstructor
 @Slf4j
 @RestController
 public class AuthController implements AuthEndpoint {
 	
-	@Autowired
-	private AuthService authService;
+	private final AuthService authService;
 
 	@Override
 	public ResponseEntity<?> register(UserRequest userDTO, HttpServletRequest request) throws Exception{

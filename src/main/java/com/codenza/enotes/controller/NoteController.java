@@ -2,22 +2,13 @@ package com.codenza.enotes.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,15 +17,16 @@ import com.codenza.enotes.dto.NoteDTO;
 import com.codenza.enotes.dto.NoteResponse;
 import com.codenza.enotes.endpoints.NoteEndpoint;
 import com.codenza.enotes.entity.FileDetails;
-import com.codenza.enotes.repository.FavouriteNoteRepository;
 import com.codenza.enotes.service.NoteService;
 import com.codenza.enotes.util.CommonUtil;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @RestController
 public class NoteController implements NoteEndpoint {
 
-	@Autowired
-	private NoteService noteService;
+	private final NoteService noteService;
 	
 	@Override
 	public ResponseEntity<?> saveNote(String notes, MultipartFile file) throws Exception{
@@ -145,7 +137,7 @@ public class NoteController implements NoteEndpoint {
 	@Override
 	public ResponseEntity<?> deleteAllNotesFromRecycleBin() throws Exception{
 		
-		List<NoteDTO> notes= noteService.getNotesFromRecycleBin();
+		noteService.getNotesFromRecycleBin();
 		
 		noteService.deleteNotesFromRecycleBin();
 		

@@ -1,12 +1,8 @@
 package com.codenza.enotes.service.impl;
 
 import java.util.List;
-import java.util.stream.Stream;
 
-import org.apache.logging.log4j.status.StatusData;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -20,17 +16,17 @@ import com.codenza.enotes.service.TodoService;
 import com.codenza.enotes.util.CommonUtil;
 import com.codenza.enotes.util.Validation;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Service
 public class TodoServiceImpl implements TodoService {
 
-	@Autowired
-	private TodoRepository todoRepository;
+	private final TodoRepository todoRepository;
 	
-	@Autowired
-	private ModelMapper mapper;
+	private final ModelMapper mapper;
 	
-	@Autowired
-	private Validation validation;
+	private final Validation validation;
 	
 	@Override
 	public Boolean saveTodo(TodoDTO todoDTO) throws Exception {

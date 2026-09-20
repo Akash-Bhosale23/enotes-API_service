@@ -1,6 +1,5 @@
 package com.codenza.enotes.service.impl;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,17 +17,17 @@ import com.codenza.enotes.repository.CategoryRepository;
 import com.codenza.enotes.service.CategoryService;
 import com.codenza.enotes.util.Validation;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Service
 public class CatetoryServiceImpl implements CategoryService {
 
-	@Autowired
-	private CategoryRepository categoryRepo;
+	private final CategoryRepository categoryRepo;
 	
-	@Autowired
-	private ModelMapper modelMapper;
+	private final ModelMapper modelMapper;
 	
-	@Autowired
-	private Validation validation;
+	private final Validation validation;
 	
 	@Override
 	public Boolean saveCategory(CategoryDTO categoryDTO) {

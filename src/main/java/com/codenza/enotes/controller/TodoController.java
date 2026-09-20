@@ -2,17 +2,10 @@ package com.codenza.enotes.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codenza.enotes.dto.TodoDTO;
@@ -20,11 +13,13 @@ import com.codenza.enotes.endpoints.TodoEndpoint;
 import com.codenza.enotes.service.TodoService;
 import com.codenza.enotes.util.CommonUtil;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @RestController
 public class TodoController implements TodoEndpoint {
 
-	@Autowired
-	private TodoService todoService;
+	private final TodoService todoService;
 	
 	@Override
 	public ResponseEntity<?> createTodo(TodoDTO todoDTO) throws Exception{

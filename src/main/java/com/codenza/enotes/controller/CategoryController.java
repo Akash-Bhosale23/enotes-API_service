@@ -2,33 +2,25 @@ package com.codenza.enotes.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codenza.enotes.dto.CategoryDTO;
 import com.codenza.enotes.dto.CategoryResponseDTO;
 import com.codenza.enotes.endpoints.CategoryEndpoint;
-import com.codenza.enotes.entity.Category;
-import com.codenza.enotes.exceptions.ResourceNotFoundException;
 import com.codenza.enotes.service.CategoryService;
 import com.codenza.enotes.util.CommonUtil;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @RestController
 public class CategoryController implements CategoryEndpoint {
 	
-	@Autowired
-	private CategoryService categoryService;
+	private final CategoryService categoryService;
 
 	@Override
 	public ResponseEntity<?> saveCategory (CategoryDTO catetoryDto){
@@ -36,10 +28,8 @@ public class CategoryController implements CategoryEndpoint {
 		Boolean saveCategory= categoryService.saveCategory(catetoryDto);
 		
 		if(saveCategory) {
-//			return new ResponseEntity<> ("Saved success", HttpStatus.CREATED);
 			return CommonUtil.createBuildResponseMessage("Saved Success", HttpStatus.CREATED);
 		}else {
-//			return new ResponseEntity<> ("Not Saved", HttpStatus.INTERNAL_SERVER_ERROR);
 			return CommonUtil.createErrorResponseMessage("Not saved", HttpStatus.INTERNAL_SERVER_ERROR);
 
 		}
@@ -94,10 +84,8 @@ public class CategoryController implements CategoryEndpoint {
 		Boolean deleted = categoryService.deleteCategoryById(id);
 		
 		if(deleted) {
-//			return new ResponseEntity<>("Category deleted Successfully..", HttpStatus.OK);
 			return CommonUtil.createBuildResponse("Category deleted Successfully", HttpStatus.OK);
 		}
-//		return new ResponseEntity<>("Category not deleted..", HttpStatus.INTERNAL_SERVER_ERROR);
 		return CommonUtil.createErrorResponseMessage("Category not deleted", HttpStatus.INTERNAL_SERVER_ERROR);
 		
 		

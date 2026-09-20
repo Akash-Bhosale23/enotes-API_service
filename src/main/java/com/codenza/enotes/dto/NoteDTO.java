@@ -1,10 +1,7 @@
 package com.codenza.enotes.dto;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
-
-import com.codenza.enotes.entity.Category;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

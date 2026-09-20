@@ -30,35 +30,29 @@ import com.codenza.enotes.util.CommonUtil;
 import com.codenza.enotes.util.Validation;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+@RequiredArgsConstructor
 @Slf4j
 @Service
 public class AuthServiceImpl implements AuthService {
 
-	@Autowired
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
 
-	@Autowired
-	private RoleRepository roleRepository;
+	private final RoleRepository roleRepository;
 
-	@Autowired
-	private Validation validation;
+	private final Validation validation;
 
-	@Autowired
-	private ModelMapper mapper;
+	private final ModelMapper mapper;
 	
-	@Autowired
-	private MailSenderService mailService;
+	private final MailSenderService mailService;
 	
-	@Autowired
-	private AuthenticationManager authenticationManager;
+	private final AuthenticationManager authenticationManager;
 	
-	@Autowired
-	private BCryptPasswordEncoder passwordEncoder;
+	private final BCryptPasswordEncoder passwordEncoder;
 	
-	@Autowired
-	private JwtService jwtService;
+	private final JwtService jwtService;
 
 	@Override
 	public Boolean register(UserRequest userDTO, String url) throws Exception {
