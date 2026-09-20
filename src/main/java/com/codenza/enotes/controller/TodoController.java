@@ -40,7 +40,7 @@ public class TodoController implements TodoEndpoint {
 	}
 	
 	@Override
-	public ResponseEntity<?> getTodoByUserId(Integer id) throws Exception{
+	public ResponseEntity<?> getTodoById(Integer id) throws Exception{
 		
 		TodoDTO todo = todoService.getTodoById(id);
 		

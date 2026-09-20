@@ -15,8 +15,6 @@ import lombok.Setter;
 @Setter
 @Builder
 public class UserRequest {
-
-	private Integer id;
 	
 	private String firstName;
 	
@@ -39,7 +37,6 @@ public class UserRequest {
 		
 		private Integer id;
 		
-		private String name;
 	}
 	
 }

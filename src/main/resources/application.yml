@@ -26,6 +26,15 @@ file:
 
 jwt:
   secret: myverystrongsecretkeymyverystrongsecretkey1234567890
+
+springdoc:
+  swagger-ui:
+    operations-sorter: method
+    tags-sorter: alpha
+    path: /enotes-doc
+  api-docs:
+    path: /enotes-api-doc
+
 ---
 # ===== DEV profile =====
 spring:
@@ -43,6 +52,9 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+
+server:
+  port: 8080
 
 ---
 # ===== TEST profile =====
@@ -62,6 +74,8 @@ spring:
       max-file-size: 100MB
       max-request-size: 100MB
 
+server:
+  port: 8081
 ---
 # ===== UAT profile =====
 spring:
@@ -79,7 +93,9 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
-        
+
+server:
+  port: 8082
 
 ---
 # ===== PROD profile =====
@@ -98,3 +114,6 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+
+server:
+  port: 8083

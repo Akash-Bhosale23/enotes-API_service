@@ -3,6 +3,7 @@ package com.codenza.enotes.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -59,7 +60,11 @@ public class NoteController implements NoteEndpoint {
 		String contentType = CommonUtil.getContentType(fileDetails.getOriginalFileName());
 		
 		headers.setContentType(MediaType.parseMediaType(contentType));
-		headers.setContentDispositionFormData("Attachement", fileDetails.getOriginalFileName());
+		headers.setContentDisposition(
+			    ContentDisposition.attachment()
+			        .filename(fileDetails.getOriginalFileName())
+			        .build()
+			);
 		
 		return ResponseEntity.ok().headers(headers).body(fileData);
 		
