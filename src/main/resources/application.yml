@@ -35,6 +35,12 @@ springdoc:
   api-docs:
     path: /enotes-api-doc
 
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
 ---
 # ===== DEV profile =====
 spring:
@@ -56,6 +62,14 @@ spring:
 server:
   port: 8080
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
 ---
 # ===== TEST profile =====
 spring:
@@ -76,6 +90,15 @@ spring:
 
 server:
   port: 8081
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,mapping
+  endpoint:
+    health:
+      show-details: always
 ---
 # ===== UAT profile =====
 spring:
@@ -97,6 +120,14 @@ spring:
 server:
   port: 8082
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
 ---
 # ===== PROD profile =====
 spring:
@@ -117,3 +148,12 @@ spring:
 
 server:
   port: 8083
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
