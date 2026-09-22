@@ -54,10 +54,20 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate: 
+        format_sql: true  
   servlet:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+
+  cache:
+    type: caffeine
+    cache-names: allCategories, activeCategory, getCategoryById
+    caffeine:
+      spec: maximumSize=500,expireAfterWrite=600s
 
 server:
   port: 8080

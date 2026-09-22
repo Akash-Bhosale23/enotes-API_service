@@ -1,11 +1,13 @@
 package com.codenza.enotes.service.impl;
 
-import java.util.Date;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -15,30 +17,29 @@ import com.codenza.enotes.entity.Category;
 import com.codenza.enotes.exceptions.ExistDataException;
 import com.codenza.enotes.exceptions.ResourceNotFoundException;
 import com.codenza.enotes.repository.CategoryRepository;
+import com.codenza.enotes.service.CacheManagerService;
 import com.codenza.enotes.service.CategoryService;
 import com.codenza.enotes.util.Validation;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class CatetoryServiceImpl implements CategoryService {
 
-	@Autowired
-	private CategoryRepository categoryRepo;
+	private final CategoryRepository categoryRepo;
 	
-	@Autowired
-	private ModelMapper modelMapper;
+	private final ModelMapper modelMapper;
 	
-	@Autowired
-	private Validation validation;
+	private final Validation validation;
+	
+	private final CacheManagerService cacheService;
 	
 	@Override
 	public Boolean saveCategory(CategoryDTO categoryDTO) {
-
-		//validation
 		
 		validation.categoryValidation(categoryDTO);
-		
-		//Check category is already exist or not
-		
+				
 		Boolean exist= categoryRepo.existsByName(categoryDTO.getName().trim());
 		
 		if(exist) {
@@ -49,8 +50,6 @@ public class CatetoryServiceImpl implements CategoryService {
 		
 		if(ObjectUtils.isEmpty(category.getId())) {
 			category.setIsDeleted(false);
-//			category.setCreatedBy(1);
-//			category.setCreatedOn(new Date());
 		}else {
 			updateCategory(category);
 		}
@@ -73,15 +72,13 @@ public class CatetoryServiceImpl implements CategoryService {
 			Category existCategory = byId.get();
 			category.setCreatedBy(existCategory.getCreatedBy());
 			category.setCreatedOn(existCategory.getCreatedOn());
-			category.setIsDeleted(existCategory.getIsDeleted());
-//			category.setUpdatedBy(1);
-//			category.setUpdatedOn(new Date());
-			
+			category.setIsDeleted(existCategory.getIsDeleted());			
 		}
 		
 	}
 
 	@Override
+	@Cacheable("allCategories")
 	public List<CategoryDTO> getAllCategory() {
 		List<Category> categories= categoryRepo.findByIsDeletedFalse();
 		List<CategoryDTO> categoryDTOList= categories.stream().map(cat->modelMapper.map(cat,CategoryDTO.class)).toList();
@@ -90,6 +87,7 @@ public class CatetoryServiceImpl implements CategoryService {
 	}
 
 	@Override
+	@Cacheable("activeCategory")
 	public List<CategoryResponseDTO> getActiveCategory() {
 	
 		List<Category> categories= categoryRepo.findByIsActiveTrueAndIsDeletedFalse();
@@ -100,6 +98,7 @@ public class CatetoryServiceImpl implements CategoryService {
 	}
 
 	@Override
+	@Cacheable(value = "getCategoryById", key="#id")
 	public CategoryDTO getCategoryById(Integer id) throws Exception {
 		Category category = categoryRepo.findByIdAndIsDeletedFalse(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Category not found with id : "+id));
@@ -114,6 +113,7 @@ public class CatetoryServiceImpl implements CategoryService {
 	}
 
 	@Override
+	@CacheEvict(value = "getCategoryById", key="#id")
 	public Boolean deleteCategoryById(Integer id) {
 		Optional<Category> findCategoryById = categoryRepo.findById(id);
 
@@ -121,6 +121,9 @@ public class CatetoryServiceImpl implements CategoryService {
 			Category category = findCategoryById.get();
 			category.setIsDeleted(true);
 			categoryRepo.save(category);
+			
+			cacheService.removeCacheByName(Arrays.asList("allCategories","activeCategory"));
+			
 			return true;
 		}
 		return false;

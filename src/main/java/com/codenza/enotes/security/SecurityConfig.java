@@ -49,7 +49,7 @@ public class SecurityConfig {
 		
 		http.csrf(csrf->csrf.disable())
 		.authorizeHttpRequests(req->req
-				.requestMatchers("/api/v1/auth/**","/api/v1/home/**","/swagger-ui/**", "/v3/api-docs/**","/enotes-doc/**","/enotes-api-doc/**","/actuator/**")
+				.requestMatchers("/api/v1/auth/**","/api/v1/home/**","/swagger-ui/**", "/v3/api-docs/**","/enotes-doc/**","/enotes-api-doc/**","/actuator/**","/api/v1/cache/**")
 				.permitAll()
 				.anyRequest()
 				.authenticated())
