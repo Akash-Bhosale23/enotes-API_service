@@ -36,10 +36,8 @@ public class CategoryController implements CategoryEndpoint {
 		Boolean saveCategory= categoryService.saveCategory(catetoryDto);
 		
 		if(saveCategory) {
-//			return new ResponseEntity<> ("Saved success", HttpStatus.CREATED);
 			return CommonUtil.createBuildResponseMessage("Saved Success", HttpStatus.CREATED);
 		}else {
-//			return new ResponseEntity<> ("Not Saved", HttpStatus.INTERNAL_SERVER_ERROR);
 			return CommonUtil.createErrorResponseMessage("Not saved", HttpStatus.INTERNAL_SERVER_ERROR);
 
 		}
@@ -54,7 +52,6 @@ public class CategoryController implements CategoryEndpoint {
 			return ResponseEntity.noContent().build();
 		}
 		else {
-//			return new ResponseEntity<>(allCategory,HttpStatus.OK);
 			return CommonUtil.createBuildResponse(allCategory, HttpStatus.OK);
 		}
 			
@@ -68,7 +65,6 @@ public class CategoryController implements CategoryEndpoint {
 			return ResponseEntity.noContent().build();
 		}
 		else {
-//			return new ResponseEntity<>(allCategory,HttpStatus.OK);
 			return CommonUtil.createBuildResponse(allCategory, HttpStatus.OK);
 		}
 			
@@ -79,10 +75,8 @@ public class CategoryController implements CategoryEndpoint {
 			CategoryDTO categoryDto= categoryService.getCategoryById(id);
 			
 			if(ObjectUtils.isEmpty(categoryDto)) {
-//				return new ResponseEntity<>("Category not found with id :"+id, HttpStatus.NOT_FOUND);
 				return CommonUtil.createErrorResponseMessage("Category not found with id :"+id, HttpStatus.NOT_FOUND);
 			}
-//			return new ResponseEntity<>(categoryDto, HttpStatus.OK);
 			return CommonUtil.createBuildResponse(categoryDto, HttpStatus.OK);
 
 	
@@ -94,10 +88,8 @@ public class CategoryController implements CategoryEndpoint {
 		Boolean deleted = categoryService.deleteCategoryById(id);
 		
 		if(deleted) {
-//			return new ResponseEntity<>("Category deleted Successfully..", HttpStatus.OK);
 			return CommonUtil.createBuildResponse("Category deleted Successfully", HttpStatus.OK);
 		}
-//		return new ResponseEntity<>("Category not deleted..", HttpStatus.INTERNAL_SERVER_ERROR);
 		return CommonUtil.createErrorResponseMessage("Category not deleted", HttpStatus.INTERNAL_SERVER_ERROR);
 		
 		

@@ -37,7 +37,8 @@ notes/
 *.jpeg 
 *.jpg 
 *.png 
-"application.yml" 
+**/application.yml
+ 
 
 ### Logs ###
 log/
